@@ -7,7 +7,7 @@ defmodule NitrogenWeb.Endpoint do
   @session_options [
     store: :cookie,
     key: "_server_key",
-    signing_salt: "Ad4c3dUJ"
+    signing_salt: "OsB4PqJm"
   ]
 
   socket "/socket", NitrogenWeb.UserSocket,

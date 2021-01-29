@@ -15,10 +15,10 @@ config :server,
 # Configures the endpoint
 config :server, NitrogenWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "FsCCCC4+MCoD/QL4xg/4+yY1dDR/lrxuv7hkA6OyJKlVM8cYwQBfQgnzLoVY2gN5",
+  secret_key_base: "FnLP87jLdZiIyvbE03tblj5fWmjSqMTGT/8tntfUjArcH9qBfPQJ8A5mEcOVhwr1",
   render_errors: [view: NitrogenWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Nitrogen.PubSub,
-  live_view: [signing_salt: "zONB0j4E"]
+  live_view: [signing_salt: "wLleyCKA"]
 
 # Configures Elixir's Logger
 config :logger, :console,
