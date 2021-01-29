@@ -1,9 +1,6 @@
-use pulldown_cmark::{Parser, Options, html};
-
 #[cfg(test)]
 mod tests {
-    use super::*;
-    use pulldown_cmark::{BrokenLink, CowStr, LinkType};
+    use pulldown_cmark::{Parser, Options, html, BrokenLink, LinkType};
 
     #[test]
     fn basic_example() {
