@@ -1,0 +1,10 @@
+[package]
+name = "markdown"
+version = "0.1.0"
+authors = ["Victor Roest <victor@xirion.net>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+pulldown-cmark = { version = "0.8", default-features = false }
