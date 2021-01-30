@@ -7,18 +7,16 @@
 # General application configuration
 use Mix.Config
 
-config :server,
-  namespace: Nitrogen,
-  ecto_repos: [Nitrogen.Repo],
-  generators: [binary_id: true]
+config :nitrogen,
+  ecto_repos: [Nitrogen.Repo]
 
 # Configures the endpoint
-config :server, NitrogenWeb.Endpoint,
+config :nitrogen, NitrogenWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "FnLP87jLdZiIyvbE03tblj5fWmjSqMTGT/8tntfUjArcH9qBfPQJ8A5mEcOVhwr1",
+  secret_key_base: "bg/Kl7x9BTypnzPMa1S3mf7m8OY4IEH7H+b5e23ElVwbBooH3kD3hSS/RA6+zkOF",
   render_errors: [view: NitrogenWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Nitrogen.PubSub,
-  live_view: [signing_salt: "wLleyCKA"]
+  live_view: [signing_salt: "e5+ItgUi"]
 
 # Configures Elixir's Logger
 config :logger, :console,

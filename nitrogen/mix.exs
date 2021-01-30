@@ -3,11 +3,12 @@ defmodule Nitrogen.MixProject do
 
   def project do
     [
-      app: :server,
+      app: :nitrogen,
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix] ++ Mix.compilers(),
+      compilers: [:rustler] ++ [:phoenix] ++ Mix.compilers(),
+      rustler_crates: [markdown_shim: []],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -45,7 +46,8 @@ defmodule Nitrogen.MixProject do
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:rustler, "~> 0.21.1"}
     ]
   end
 

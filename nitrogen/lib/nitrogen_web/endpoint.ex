@@ -1,13 +1,13 @@
 defmodule NitrogenWeb.Endpoint do
-  use Phoenix.Endpoint, otp_app: :server
+  use Phoenix.Endpoint, otp_app: :nitrogen
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.
   # Set :encryption_salt if you would also like to encrypt it.
   @session_options [
     store: :cookie,
-    key: "_server_key",
-    signing_salt: "OsB4PqJm"
+    key: "_nitrogen_key",
+    signing_salt: "xyJV+LC3"
   ]
 
   socket "/socket", NitrogenWeb.UserSocket,
@@ -22,7 +22,7 @@ defmodule NitrogenWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :server,
+    from: :nitrogen,
     gzip: false,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
@@ -32,7 +32,7 @@ defmodule NitrogenWeb.Endpoint do
     socket "/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket
     plug Phoenix.LiveReloader
     plug Phoenix.CodeReloader
-    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :server
+    plug Phoenix.Ecto.CheckRepoStatus, otp_app: :nitrogen
   end
 
   plug Phoenix.LiveDashboard.RequestLogger,

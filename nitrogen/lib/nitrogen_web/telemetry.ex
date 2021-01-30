@@ -31,11 +31,11 @@ defmodule NitrogenWeb.Telemetry do
       ),
 
       # Database Metrics
-      summary("server.repo.query.total_time", unit: {:native, :millisecond}),
-      summary("server.repo.query.decode_time", unit: {:native, :millisecond}),
-      summary("server.repo.query.query_time", unit: {:native, :millisecond}),
-      summary("server.repo.query.queue_time", unit: {:native, :millisecond}),
-      summary("server.repo.query.idle_time", unit: {:native, :millisecond}),
+      summary("nitrogen.repo.query.total_time", unit: {:native, :millisecond}),
+      summary("nitrogen.repo.query.decode_time", unit: {:native, :millisecond}),
+      summary("nitrogen.repo.query.query_time", unit: {:native, :millisecond}),
+      summary("nitrogen.repo.query.queue_time", unit: {:native, :millisecond}),
+      summary("nitrogen.repo.query.idle_time", unit: {:native, :millisecond}),
 
       # VM Metrics
       summary("vm.memory.total", unit: {:byte, :kilobyte}),

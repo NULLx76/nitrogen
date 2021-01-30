@@ -29,7 +29,7 @@ defmodule NitrogenWeb do
   def view do
     quote do
       use Phoenix.View,
-        root: "lib/server_web/templates",
+        root: "lib/nitrogen_web/templates",
         namespace: NitrogenWeb
 
       # Import convenience functions from controllers
