@@ -1,50 +1,39 @@
-// We need to import the CSS so that webpack will load it.
-// The MiniCssExtractPlugin is used to separate it out into
-// its own CSS file.
+// We need to import css for webpack to find it
 import "../css/app.scss"
 
-// webpack automatically bundles all modules in your
-// entry points. Those entry points can be configured
-// in "webpack.config.js".
-//
-// Import deps with the dep name or local files with a relative path, for example:
-//
-//     import {Socket} from "phoenix"
-//     import socket from "./socket"
-//
+// Phoenix imports
 import "phoenix_html"
 import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 
-// Monaco Editor
-import * as monaco from "monaco-editor";
-
 const Hooks = {};
 
+// Monaco Editor
 Hooks.MonacoEditor = {
     mounted() {
-        this.edit = monaco.editor.create(this.el, {
-            value: this.el.dataset.raw,
-            language: "markdown",
-            automaticLayout: true,
-        })
-
-        this.edit.getModel().onDidChangeContent(e => 
-            this.pushEvent("update", {
-                value: this.edit.getModel().getValue(),
+        import( /* webpackChunkName: "monaco" */ "monaco-editor").then(monaco => {
+            this.edit = monaco.editor.create(this.el, {
+                value: this.el.dataset.raw,
+                language: "markdown",
+                // automaticLayout: true,
             })
-        );
+    
+            this.edit.getModel().onDidChangeContent(e => 
+                this.pushEvent("update", {
+                    value: this.edit.getModel().getValue(),
+                })
+            );
+        });
     }
 }
 
-// Code highlighting
 import Prism from "prismjs"
 Hooks.Prism = {
     updated() {
         this.el.querySelectorAll("pre code").forEach((block) => {
             Prism.highlightElement(block)
-          });
+        });
     }
 }
 

@@ -1,8 +1,0 @@
-<div class="editor">
-  <div class="input">
-    <%= live_component @socket, NitrogenWeb.MonacoComponent, id: "monaco", raw_md: @raw_md %>
-  </div>
-  <div class="output">
-    <%= live_component @socket, NitrogenWeb.MarkdownComponent, md: @md %>
-  </div>
-</div>

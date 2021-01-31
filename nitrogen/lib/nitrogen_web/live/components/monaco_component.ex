@@ -3,7 +3,7 @@ defmodule NitrogenWeb.MonacoComponent do
 
   def render(assigns) do
     ~L"""
-    <div id="monaco-editor" phx-hook="MonacoEditor"></div>
+    <div id="monaco-editor" phx-hook="MonacoEditor" data-raw="<%= @raw_md %>"></div>
     """
   end
 end
