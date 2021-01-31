@@ -34,7 +34,8 @@ defmodule NitrogenWeb.NoteLive do
   end
 
   @impl true
-  def mount(%{"id" => id}, _session, socket) do
+  def mount(_params, session, socket) do
+    id = Map.fetch!(session, "note_id")
     note = Note.get_note!(id)
     md = Note.render(note)
 
@@ -45,33 +46,17 @@ defmodule NitrogenWeb.NoteLive do
 
   @impl true
   def render(assigns) do
-    """
-
-    """
-
     ~L"""
-    <div class="content">
-      <nav>
-        <h2 class="title">Nitrogen</h2>
-        <ul>
-          <li>Note 1</li>
-          <li>Note 2</li>
-          <li>Note 3</li>
-          <li>Note 4</li>
-          <li>Note 5</li>
-        </ul>
-      </nav>
-      <div class="editor-wrapper">
-        <div class="toolbar">
-          <h2 class="note-name"><%= @new_note.title %></h2>
+    <div class="editor-wrapper">
+      <div class="toolbar">
+        <h2 class="note-name"><%= @new_note.title %></h2>
+      </div>
+      <div class="editor">
+        <div class="input">
+          <%= live_component @socket, NitrogenWeb.MonacoComponent, id: "monaco", raw_md: @content %>
         </div>
-        <div class="editor">
-          <div class="input">
-            <%= live_component @socket, NitrogenWeb.MonacoComponent, id: "monaco", raw_md: @content %>
-          </div>
-          <div class="output">
-            <%= live_component @socket, NitrogenWeb.MarkdownComponent, md: @md %>
-          </div>
+        <div class="output">
+          <%= live_component @socket, NitrogenWeb.MarkdownComponent, md: @md %>
         </div>
       </div>
     </div>

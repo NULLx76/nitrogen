@@ -17,7 +17,8 @@ defmodule NitrogenWeb.Router do
   scope "/", NitrogenWeb do
     pipe_through :browser
 
-    live "/note/:id", NoteLive, :index
+    live "/", HomeLive, :index
+    live "/note/:id", HomeLive, :index
   end
 
   # Other scopes may use custom stacks.
