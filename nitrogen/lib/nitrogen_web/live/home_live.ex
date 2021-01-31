@@ -1,6 +1,7 @@
 defmodule NitrogenWeb.HomeLive do
   use NitrogenWeb, :live_view
   alias Nitrogen.Note
+  alias NitrogenWeb.Component
 
   @impl true
   def mount(_params, _session, socket) do
@@ -23,7 +24,7 @@ defmodule NitrogenWeb.HomeLive do
   def render(assigns) do
     ~L"""
     <div class="content">
-      <%= live_component @socket, NitrogenWeb.NavigationComponent %>
+      <%= live_component @socket, Component.Navigation %>
       <%= if @note_id > 0 do %>
         <%= live_render @socket, NitrogenWeb.NoteLive, id: "editor-view", session: %{"note_id" => @note_id} %>
       <%= else %>

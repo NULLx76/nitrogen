@@ -1,4 +1,4 @@
-defmodule NitrogenWeb.NavigationComponent do
+defmodule NitrogenWeb.Component.Navigation do
   use NitrogenWeb, :live_component
 
   def render(assigns) do

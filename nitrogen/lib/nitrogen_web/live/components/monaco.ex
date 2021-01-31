@@ -1,4 +1,4 @@
-defmodule NitrogenWeb.MonacoComponent do
+defmodule NitrogenWeb.Component.Monaco do
   use NitrogenWeb, :live_component
 
   def render(assigns) do

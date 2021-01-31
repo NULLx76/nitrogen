@@ -21,11 +21,6 @@ defmodule NitrogenWeb.Router do
     live "/note/:id", HomeLive, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", NitrogenWeb do
-  #   pipe_through :api
-  # end
-
   # Enables LiveDashboard only for development
   #
   # If you want to use the LiveDashboard in production, you should put

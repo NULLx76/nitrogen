@@ -1,4 +1,4 @@
-defmodule NitrogenWeb.MarkdownComponent do
+defmodule NitrogenWeb.Component.MarkdownPreview do
   use NitrogenWeb, :live_component
 
   def render(assigns) do
