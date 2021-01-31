@@ -3,14 +3,14 @@ defmodule NitrogenWeb.PageLive do
   alias Nitrogen.Note
 
   @impl true
-  def handle_event("render_note", %{"value" => raw}, socket) do
+  def handle_event("update", %{"value" => raw}, socket) do
     rendered = Note.render(%Note{content: raw})
 
-    {:noreply, assign(socket, rendered_note: rendered)}
+    {:noreply, assign(socket, md: rendered, raw_md: raw)}
   end
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, rendered_note: "")}
+    {:ok, assign(socket, md: "", raw_md: "")}
   end
 end

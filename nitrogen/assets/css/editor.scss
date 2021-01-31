@@ -1,0 +1,35 @@
+#monaco-editor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.editor {
+    display: flex;
+    height: 100%;
+    position: relative;
+
+    // inset-0
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+
+    .input {
+        flex-grow: 1;
+        height: 100%;
+        position: relative;
+    }
+
+    .output {
+        overflow-y: scroll;
+        padding: 0.5rem 1rem;
+        height: calc(100% - 1rem);
+        width: calc(50% - 2rem);
+    }
+}

@@ -17,8 +17,39 @@ import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 
+// Monaco Editor
+import * as monaco from "monaco-editor";
+
+const Hooks = {};
+
+Hooks.MonacoEditor = {
+    mounted() {
+        this.edit = monaco.editor.create(this.el, {
+            value: this.el.dataset.raw,
+            language: "markdown",
+            automaticLayout: true,
+        })
+
+        this.edit.getModel().onDidChangeContent(e => 
+            this.pushEvent("update", {
+                value: this.edit.getModel().getValue(),
+            })
+        );
+    }
+}
+
+// Code highlighting
+import Prism from "prismjs"
+Hooks.Prism = {
+    updated() {
+        this.el.querySelectorAll("pre code").forEach((block) => {
+            Prism.highlightElement(block)
+          });
+    }
+}
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+let liveSocket = new LiveSocket("/live", Socket, {hooks: Hooks, params: {_csrf_token: csrfToken}})
 
 // Show progress bar on live navigation and form submits
 window.addEventListener("phx:page-loading-start", info => NProgress.start())

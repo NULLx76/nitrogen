@@ -41,6 +41,10 @@ module.exports = (env, options) => {
             'css-loader',
             'sass-loader',
           ],
+        },
+        {
+          test: /\.ttf$/,
+          use: ['file-loader']
         }
       ]
     },
