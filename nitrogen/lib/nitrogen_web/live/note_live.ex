@@ -2,8 +2,10 @@ defmodule NitrogenWeb.NoteLive do
   use NitrogenWeb, :live_view
   alias Nitrogen.Note
 
+  @sched_store :store
+
   defp schedule_save do
-    Process.send_after(self(), :store, 5_000)
+    Process.send_after(self(), @sched_store, 5_000)
   end
 
   defp save_note(socket) do
@@ -19,12 +21,13 @@ defmodule NitrogenWeb.NoteLive do
   end
 
   @impl true
-  def handle_info(:store, socket) do
+  def handle_info(@sched_store, socket) do
     {:ok, note} = save_note(socket)
     schedule_save()
     {:noreply, assign(socket, note: note, new_note: note)}
   end
 
+  @impl true
   def terminate(_reason, socket) do
     {:ok, %Note{}} = save_note(socket)
     :ok
@@ -42,13 +45,34 @@ defmodule NitrogenWeb.NoteLive do
 
   @impl true
   def render(assigns) do
+    """
+
+    """
+
     ~L"""
-    <div class="editor">
-      <div class="input">
-        <%= live_component @socket, NitrogenWeb.MonacoComponent, id: "monaco", raw_md: @content %>
-      </div>
-      <div class="output">
-        <%= live_component @socket, NitrogenWeb.MarkdownComponent, md: @md %>
+    <div class="content">
+      <nav>
+        <h2 class="title">Nitrogen</h2>
+        <ul>
+          <li>Note 1</li>
+          <li>Note 2</li>
+          <li>Note 3</li>
+          <li>Note 4</li>
+          <li>Note 5</li>
+        </ul>
+      </nav>
+      <div class="editor-wrapper">
+        <div class="toolbar">
+          <h2 class="note-name"><%= @new_note.title %></h2>
+        </div>
+        <div class="editor">
+          <div class="input">
+            <%= live_component @socket, NitrogenWeb.MonacoComponent, id: "monaco", raw_md: @content %>
+          </div>
+          <div class="output">
+            <%= live_component @socket, NitrogenWeb.MarkdownComponent, md: @md %>
+          </div>
+        </div>
       </div>
     </div>
     """

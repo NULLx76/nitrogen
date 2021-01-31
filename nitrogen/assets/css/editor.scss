@@ -1,3 +1,70 @@
+@import "./vars.scss";
+
+$nav-width: 15rem;
+$toolbar-height: 3rem;
+
+.toolbar {
+    height: $toolbar-height;
+
+    background-color: $color-dark;
+
+    padding-left: 1rem;
+
+    display: grid;
+    grid-template-columns: $nav-width 1fr;
+
+    align-items: center;
+
+    .title {
+        color: $color-orange;
+    }
+
+    .note-name {
+        color: $color-green;
+    }
+}
+
+
+.content, .editor-wrapper {
+    height: 100%;
+    width: 100%;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: $nav-width 1fr;
+}
+
+.content nav {
+    display: grid;
+    grid-template-rows: $toolbar-height 1fr;
+
+    background-color: $color-dark;
+
+    align-items: center;
+    justify-content: center;
+
+    h2 {
+        text-align: center;
+        color: $color-orange;
+    }
+
+    ul {
+        width: 100%;
+        height: 100%;
+
+        margin-top: $toolbar-height;
+        padding-left: 0;
+
+        color: $color-yellow;
+    }
+
+    li {
+        width: 100%;
+        list-style: none;
+    }
+}
+
 #monaco-editor {
     position: absolute;
     top: 0;
@@ -9,7 +76,11 @@
     padding: 0;
 }
 
-.editor {
+@mixin drop-shadow {
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.content .editor {
     display: flex;
     height: 100%;
     position: relative;
@@ -20,16 +91,23 @@
     bottom: 0px;
     left: 0px;
 
+    .input, .output {
+        margin-top: 0.2rem;
+        @include drop-shadow;
+    }
+    
     .input {
         flex-grow: 1;
-        height: 100%;
+        margin-right: 0.2rem;
+        height: calc(100% - 0.2rem);
         position: relative;
     }
-
+    
     .output {
-        overflow-y: scroll;
         padding: 0.5rem 1rem;
-        height: calc(100% - 1rem);
-        width: calc(50% - 2rem);
+        height: calc(100% - 1.2rem);
+        width: calc(50% - 2.2rem);
     }
+
 }
+

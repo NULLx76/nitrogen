@@ -12,4 +12,9 @@
 
 # Insert user and example note
 user = Nitrogen.Repo.insert!(%Nitrogen.User{name: "user"}).id
-Nitrogen.Repo.insert!(%Nitrogen.Note{title: "Example Note", content: "# Example Note", user_id: user})
+
+Nitrogen.Repo.insert!(%Nitrogen.Note{
+  title: "Example Note",
+  content: "# Example Note",
+  user_id: user
+})

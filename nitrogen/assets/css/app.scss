@@ -2,8 +2,30 @@
 @import "../node_modules/nprogress/nprogress.css";
 @import "./phoenix.scss";
 @import "./editor.scss";
+@import "./vars.scss";
+
 
 main {
-  width: 98vw;
-  height: 98vh;
+  position: absolute;
+
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+
+  width: 100%;
+  height: 100%;
+
+  left: 0;
+  top: 0;
+}
+
+h1, h2, h3 {
+  padding: 0;
+  margin: 0;
+}
+
+w-full {
+  width: 100%;
+}
+
+h-full {
+  height: 100%;
 }
