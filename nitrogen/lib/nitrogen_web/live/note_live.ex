@@ -62,13 +62,13 @@ defmodule NitrogenWeb.NoteLive do
   def render(assigns) do
     ~L"""
     <div class="editor-wrapper">
-      <div class="toolbar">
+      <div id="toolbar" class="toolbar" phx-hook="StealFocus">
         <%= if @edit_title do %>
           <form phx-submit="save-title">
-            <input name="title" type="text" value="<%= @new_note.title %>">
+            <input id="editor-form-title-input" name="title" type="text" value="<%= @new_note.title %>">
             <button type="submit">[save]</button>
           </form>
-        <%= else  %>
+        <% else %>
           <div class="note-name">
             <h2><%= @new_note.title %>&nbsp;</h2><button class="edit" phx-click="edit-title">[edit]</button>
           </div>

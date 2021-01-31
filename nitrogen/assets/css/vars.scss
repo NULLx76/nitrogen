@@ -3,3 +3,13 @@ $color-grey: #747474;
 $color-orange: #FF652F;
 $color-yellow: #FFE400;
 $color-green: #14A76C;
+
+$nav-width: 15rem;
+$toolbar-height: 3rem;
+
+@mixin inset-0 {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}

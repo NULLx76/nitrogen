@@ -12,13 +12,14 @@ const Hooks = {};
 // Monaco Editor
 Hooks.MonacoEditor = {
     mounted() {
+        NProgress.start()
         import( /* webpackChunkName: "monaco" */ "monaco-editor").then(monaco => {
             let server_change = false;
 
             this.edit = monaco.editor.create(this.el, {
                 value: this.el.dataset.raw,
                 language: "markdown",
-                // automaticLayout: true,
+                automaticLayout: true,
             })
     
             this.edit.getModel().onDidChangeContent(e => {
@@ -35,6 +36,7 @@ Hooks.MonacoEditor = {
                 this.edit.getModel().setValue(content);
             })
         });
+        NProgress.done()
     }
 }
 
@@ -44,6 +46,15 @@ Hooks.Prism = {
         this.el.querySelectorAll("pre code").forEach((block) => {
             Prism.highlightElement(block)
         });
+    }
+}
+
+Hooks.StealFocus = {
+    updated() {
+        const input = document.getElementById("editor-form-title-input");
+        if (input) {
+            input.select();
+        }
     }
 }
 

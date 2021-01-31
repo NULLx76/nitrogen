@@ -1,26 +1,27 @@
 /* This file is for your main application css. */
 @import "../node_modules/nprogress/nprogress.css";
-@import "./phoenix.scss";
-@import "./editor.scss";
 @import "./vars.scss";
-
+@import "./fonts.scss";
+@import "./phoenix.scss";
+@import "./home.scss";
+@import "./editor.scss";
 
 main {
-  position: absolute;
+  position: fixed;
 
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: sans-serif;
 
-  width: 100%;
-  height: 100%;
+  @include inset-0;
 
-  left: 0;
-  top: 0;
+  padding: 0;
+  margin: 0;
+
+  overflow: hidden;
 }
 
 h1, h2, h3 {
   padding: 0;
   margin: 0;
-  display: inline-block;
 }
 
 a {
