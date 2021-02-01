@@ -39,8 +39,9 @@ steps:
     mount:
       - nitrogen/deps
       - nitrogen/_build
-      - target/
-      - Cargo.lock
+      - ~/.cargo/registry/index
+      - ~/.cargo/registry/cache
+      - ~/.cargo/git
     when:
       event: push
 
