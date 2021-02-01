@@ -6,6 +6,7 @@ const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MonacoWebpackPlugin = require("monaco-editor-webpack-plugin");
+const prefixer = require('postcss-prefixer')
 
 module.exports = (env, options) => {
   const devMode = options.mode !== 'production';
@@ -36,10 +37,11 @@ module.exports = (env, options) => {
           }
         },
         {
-          test: /\.[s]?css$/,
+          test: /\.([s]?css|sass)$/,
           use: [
             MiniCssExtractPlugin.loader,
             'css-loader',
+            'postcss-loader',
             'sass-loader',
           ],
         },

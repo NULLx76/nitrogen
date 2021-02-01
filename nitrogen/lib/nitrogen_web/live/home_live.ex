@@ -16,12 +16,13 @@ defmodule NitrogenWeb.HomeLive do
   def render(assigns) do
     ~H"""
     <div class="content">
-      <Component.Navigation id="content-nav" />
+      <Component.Navigation />
 
       <NitrogenWeb.NoteLive id="content-editor" :if={{@note_id != 0}} session={{ %{"note_id" => @note_id} }} />
 
       <span :if={{ @note_id == 0 }}>
         Lorem Ipsum
+        <button class="b-button">button</button>
       </span>
     </div>
     """
