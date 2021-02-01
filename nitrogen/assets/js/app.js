@@ -1,5 +1,5 @@
 // We need to import css for webpack to find it
-import "../css/old/app.scss"
+import "../css/app.css"
 
 // Phoenix imports
 import "phoenix_html"

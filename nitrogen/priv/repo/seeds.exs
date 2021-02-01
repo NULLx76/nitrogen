@@ -10,11 +10,14 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-# Insert user and example note
+# Insert user, initial notebook and example note
 user = Nitrogen.Repo.insert!(%Nitrogen.User{name: "user"}).id
 
-Nitrogen.Repo.insert!(%Nitrogen.Note{
+notebook =
+  Nitrogen.Repo.insert!(%Nitrogen.Notes.Notebook{name: "Initial Notebook", user_id: user}).id
+
+Nitrogen.Repo.insert!(%Nitrogen.Notes.Note{
   title: "Example Note",
   content: "# Example Note",
-  user_id: user
+  notebook_id: notebook
 })

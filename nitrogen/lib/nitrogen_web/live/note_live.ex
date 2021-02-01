@@ -1,6 +1,7 @@
 defmodule NitrogenWeb.NoteLive do
   use Surface.LiveView
-  alias Nitrogen.Note
+  alias Nitrogen.Notes.Note
+  alias Nitrogen.Notes
   alias NitrogenWeb.Component
 
   @sched_store :store
@@ -16,13 +17,13 @@ defmodule NitrogenWeb.NoteLive do
   end
 
   defp save_note(socket) do
-    Note.update_note(socket.assigns.note, Map.from_struct(socket.assigns.new_note))
+    Notes.update_note(socket.assigns.note, Map.from_struct(socket.assigns.new_note))
   end
 
   @impl true
   def handle_event("update", %{"value" => raw}, socket) do
     new_note = %Note{socket.assigns.new_note | content: raw}
-    md = Note.render(new_note)
+    md = Notes.render_note(new_note)
 
     {:noreply, assign(socket, new_note: new_note, md: md)}
   end
@@ -37,6 +38,7 @@ defmodule NitrogenWeb.NoteLive do
     new_note = %Note{socket.assigns.new_note | title: title}
     socket = assign(socket, new_note: new_note, edit_title: false)
     {:ok, %Note{}} = save_note(socket)
+    NitrogenWeb.Endpoint.broadcast_from(self(), "title-update", "new_note.id", new_note)
     {:noreply, socket}
   end
 
@@ -54,8 +56,8 @@ defmodule NitrogenWeb.NoteLive do
   end
 
   def mount(_params, %{"note_id" => id}, socket) do
-    note = Note.get_note!(id)
-    md = Note.render(note)
+    note = Notes.get_note!(id)
+    md = Notes.render_note(note)
 
     schedule_save()
 

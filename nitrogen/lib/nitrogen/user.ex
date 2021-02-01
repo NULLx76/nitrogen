@@ -2,13 +2,14 @@ defmodule Nitrogen.User do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query, warn: false
-  alias Nitrogen.{Repo, Note, User}
+  alias Nitrogen.{Repo, User}
+  alias Nitrogen.Notes.Notebook
   alias Markdown
 
   schema "users" do
     field :name, :string
 
-    has_many :notes, Note
+    has_many :notebooks, Notebook
 
     timestamps()
   end
@@ -25,6 +26,11 @@ defmodule Nitrogen.User do
   end
 
   def get_user!(id), do: Repo.get!(User, id)
+
+  def get_user_and_notes!(id) do
+    Repo.get!(User, id)
+    |> Repo.preload([:notebooks, notebooks: :notes])
+  end
 
   def create_user(attrs \\ %{}) do
     %User{}

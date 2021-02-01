@@ -1,0 +1,51 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@layer base {
+    html {
+        overflow: hidden;
+    }
+
+    /* Hide live reload frame */
+    iframe {
+        height: 0;
+        width: 0;
+    }
+}
+
+.nav-item {
+    @apply px-3 relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6;
+}
+
+.nav-header {
+    @apply relative flex flex-row font-bold items-center h-8 text-gray-800 pr-6;
+}
+
+.toolbar {
+    @apply h-11 px-4 mt-0 mx-2 shadow-md rounded-b-md bg-indigo-600 bg-opacity-75;
+
+    display: grid;
+    grid-template-columns: 1fr min-content;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.editor {
+    height: calc(100% - 3rem);
+}
+
+#monaco-editor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+#content-editor {
+    height: 100%;
+}

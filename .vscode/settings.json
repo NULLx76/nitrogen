@@ -1,3 +1,7 @@
 {
-    "elixirLS.projectDir": "nitrogen/"
+    "elixirLS.projectDir": "nitrogen/",
+    "css.validate": false,
+    "editor.quickSuggestions": {
+        "strings": true
+    },
 }

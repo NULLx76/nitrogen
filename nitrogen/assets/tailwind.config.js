@@ -8,10 +8,18 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    backgroundColor: theme => ({
+      ...theme('colors'),
+      'primary': '#313a50',
+      'secondary': '#ffed4a',
+      'danger': '#e3342f',
+    }),
     extend: {},
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms')
+  ],
 }

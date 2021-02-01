@@ -8,6 +8,7 @@ defmodule NitrogenWeb.Router do
     plug :put_root_layout, {NitrogenWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fake_login
   end
 
   pipeline :api do
@@ -19,6 +20,11 @@ defmodule NitrogenWeb.Router do
 
     live "/", HomeLive, :index
     live "/note/:id", HomeLive, :index
+  end
+
+  def fake_login(conn, _opts) do
+    user = Nitrogen.User.get_user!(1)
+    put_session(conn, :user, user)
   end
 
   # Enables LiveDashboard only for development
