@@ -1,9 +1,11 @@
 defmodule NitrogenWeb.Component.MarkdownPreview do
-  use NitrogenWeb, :live_component
+  use Surface.Component
+
+  prop md, :string, default: ""
 
   def render(assigns) do
-    ~L"""
-    <div id="markdown-preview" class="markdown" phx-hook="Prism"><%= raw @md %></div>
+    ~H"""
+    <div id="markdown-preview" class="markdown" phx-hook="Prism">{{ raw @md }}</div>
     """
   end
 end

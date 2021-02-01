@@ -1,9 +1,15 @@
 defmodule NitrogenWeb.NoteLive do
-  use NitrogenWeb, :live_view
+  use Surface.LiveView
   alias Nitrogen.Note
   alias NitrogenWeb.Component
 
   @sched_store :store
+
+  data note, :any
+  data new_note, :any
+  data content, :string, default: ""
+  data md, :string, default: ""
+  data edit_title, :boolean, default: false
 
   defp schedule_save do
     Process.send_after(self(), @sched_store, 5_000)
@@ -47,7 +53,6 @@ defmodule NitrogenWeb.NoteLive do
     :ok
   end
 
-  @impl true
   def mount(_params, %{"note_id" => id}, socket) do
     note = Note.get_note!(id)
     md = Note.render(note)
@@ -56,34 +61,5 @@ defmodule NitrogenWeb.NoteLive do
 
     {:ok,
      assign(socket, note: note, new_note: note, content: note.content, md: md, edit_title: false)}
-  end
-
-  @impl true
-  def render(assigns) do
-    ~L"""
-    <div class="editor-wrapper">
-      <div id="toolbar" class="toolbar" phx-hook="StealFocus">
-        <%= if @edit_title do %>
-          <form phx-submit="save-title">
-            <input id="editor-form-title-input" name="title" type="text" value="<%= @new_note.title %>">
-            <button type="submit">[save]</button>
-          </form>
-        <% else %>
-          <div class="note-name">
-            <h2><%= @new_note.title %>&nbsp;</h2><button class="edit" phx-click="edit-title">[edit]</button>
-          </div>
-        <% end %>
-        <span class="last-saved">Last Saved: <%= @new_note.updated_at %></span>
-      </div>
-      <div class="editor">
-        <div class="input">
-          <%= live_component @socket, Component.Monaco, id: "monaco", raw_md: @content %>
-        </div>
-        <div class="output">
-          <%= live_component @socket, Component.MarkdownPreview, md: @md %>
-        </div>
-      </div>
-    </div>
-    """
   end
 end

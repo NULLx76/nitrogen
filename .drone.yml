@@ -16,7 +16,7 @@ steps:
       from_secret: MINIO_SECRET_KEY
 
 - name: test
-  image: harbor.xirion.net/library/elixir-rust # See Dockerfile.ci for the image definition
+  image: harbor.xirion.net/library/elixir-rust:nightly # See Dockerfile.ci for the image definition
   commands:
     - cd nitrogen
     - mix local.rebar --force

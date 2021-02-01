@@ -1,9 +1,11 @@
 defmodule NitrogenWeb.Component.Monaco do
-  use NitrogenWeb, :live_component
+  use Surface.LiveComponent
+
+  prop raw_md, :string, default: ""
 
   def render(assigns) do
-    ~L"""
-    <div id="monaco-editor" phx-hook="MonacoEditor" data-raw="<%= @raw_md %>"></div>
+    ~H"""
+    <div id="monaco-editor" phx-hook="MonacoEditor" data-raw="{{ @raw_md }}"></div>
     """
   end
 end

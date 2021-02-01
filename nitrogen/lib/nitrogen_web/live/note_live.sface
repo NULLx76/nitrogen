@@ -1,0 +1,24 @@
+<div class="editor-wrapper">
+    <!-- Toolbar -->
+    <div id="toolbar" class="toolbar" phx-hook="StealFocus">
+        <form :if={{ @edit_title }} phx-submit="save-title">
+            <input id="editor-form-title-input" name="title" type="text" value="{{ @new_note.title }}">
+            <button type="submit">[save]</button>
+        </form>
+        <div :if={{ !@edit_title }} class="note-name">
+            <h2>{{ @new_note.title }}&nbsp;</h2>
+            <button class="edit" phx-click="edit-title">[edit]</button>
+        </div>
+        <span class="last-saved">Last Saved: {{ @new_note.updated_at }}</span>
+    </div>
+
+    <!-- Editor -->
+    <div class="editor">
+        <div class="input">
+            <Component.Monaco id="monaco-editor" raw_md={{ @content }} />
+        </div>
+        <div class="output">
+            <Component.MarkdownPreview md={{ @md }} />
+        </div>
+    </div>
+</div>

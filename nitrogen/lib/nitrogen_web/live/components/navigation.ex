@@ -1,16 +1,14 @@
 defmodule NitrogenWeb.Component.Navigation do
-  use NitrogenWeb, :live_component
+  use Surface.Component
+  alias Surface.Components.LivePatch
+  alias NitrogenWeb.Router.Helpers, as: Routes
 
   def render(assigns) do
-    ~L"""
+    ~H"""
     <nav>
-        <h2 class="title"><%= live_patch "Nitrogen", to: Routes.home_path(@socket, :index) %></h2>
+        <h2 class="title"><LivePatch to={{ Routes.home_path(@socket, :index) }}>Nitrogen</LivePatch></h2>
         <ul>
-          <li><%= live_patch "Note 1", to: Routes.home_path(@socket, :index, 1) %></li>
-          <li><%= live_patch "Note 1", to: Routes.home_path(@socket, :index, 1) %></li>
-          <li><%= live_patch "Note 1", to: Routes.home_path(@socket, :index, 1) %></li>
-          <li><%= live_patch "Note 1", to: Routes.home_path(@socket, :index, 1) %></li>
-          <li><%= live_patch "Note 1", to: Routes.home_path(@socket, :index, 1) %></li>
+          <li><LivePatch to={{ Routes.home_path(@socket, :index, 1) }}>Note 1</LivePatch></li>
         </ul>
     </nav>
     """

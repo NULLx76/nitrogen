@@ -47,7 +47,8 @@ defmodule Nitrogen.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:rustler, "~> 0.21.1"}
+      {:rustler, "~> 0.21.1"},
+      {:surface, "~> 0.2.0"}
     ]
   end
 
