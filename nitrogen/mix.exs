@@ -5,9 +5,9 @@ defmodule Nitrogen.MixProject do
     [
       app: :nitrogen,
       version: "0.1.0",
-      elixir: "~> 1.7",
+      elixir: "~> 1.11",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:rustler] ++ [:phoenix] ++ Mix.compilers(),
+      compilers: [:rustler, :phoenix] ++ Mix.compilers(),
       rustler_crates: [markdown_shim: []],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),

@@ -2,16 +2,16 @@
     <!-- Toolbar -->
     <div id="toolbar" class="toolbar" phx-hook="StealFocus">
         <form :if={{ @edit_title }} phx-submit="save-title">
-            <input id="editor-form-title-input" name="title" class="bg-indigo-500 text-xl" type="text" value="{{ @new_note.title }}">
+            <input id="editor-form-title-input" name="title" class="text-xl text-black" type="text" value="{{ @new_note.title }}">
             <button type="submit">[save]</button>
         </form>
         <div :if={{ !@edit_title }} class="flex flex-column align-center">
-            <h2 class="text-2xl">{{ @new_note.title }}</h2>
+            <h2 class="text-2xl text-white">{{ @new_note.title }}</h2>
             &nbsp;
-            <button class="text-black-200" phx-click="edit-title">[edit]</button>
+            <button class="text-gray-300" phx-click="edit-title">[rename]</button>
         </div>
 
-        <span class="">Last Saved: {{ @new_note.updated_at }}</span>
+        <span class="text-gray-300 px-4">Last Saved: {{ @new_note.updated_at }}</span>
     </div>
 
     <!-- Editor -->

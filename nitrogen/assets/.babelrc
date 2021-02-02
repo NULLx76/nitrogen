@@ -11,9 +11,9 @@
             "javascript",
             "markdown",
             "markup",
-            "ruby",
             "scss",
-            "toml"
+            "toml",
+            "rust"
             ],
             // themes can be found in this directory:
             // assets/node_modules/prismjs/themes

@@ -36,3 +36,6 @@ npm-debug.log
 # NIFs
 priv/native/
 *.so
+
+# Elixir LS
+.elixir_ls

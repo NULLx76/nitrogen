@@ -4,7 +4,6 @@ defmodule Nitrogen.User do
   import Ecto.Query, warn: false
   alias Nitrogen.{Repo, User}
   alias Nitrogen.Notes.Notebook
-  alias Markdown
 
   schema "users" do
     field :name, :string

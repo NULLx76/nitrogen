@@ -2,7 +2,7 @@ defmodule NitrogenWeb.HomeLive do
   use NitrogenWeb, :live_view
   alias NitrogenWeb.Component
   alias Nitrogen.User
-  alias Nitrogen.Notes.Notebook
+  alias Nitrogen.Notes.{Note,Notebook}
 
   @impl true
   def handle_params(%{"id" => id}, _session, socket) do
@@ -23,8 +23,10 @@ defmodule NitrogenWeb.HomeLive do
       socket.assigns.notebooks
       |> Enum.map(fn el ->
         if el.id == new_note.notebook_id do
-          notes = Enum.map(el.notes, &if(&1.id == new_note.id, do: new_note))
+          notes = Enum.map(el.notes, &if(&1.id == new_note.id, do: %Note{&1 | title: new_note.title }, else: &1))
           %Notebook{el | notes: notes}
+        else
+          el
         end
       end)
 
@@ -46,7 +48,7 @@ defmodule NitrogenWeb.HomeLive do
       <Component.Navigation id="nav" notebooks={{ @notebooks }}/>
 
       <div class="col-span-5 h-screen" :if={{@note_id > 0}}>
-        <NitrogenWeb.NoteLive id="content-editor" session={{ %{"note_id" => @note_id} }}  />
+        <NitrogenWeb.NoteLive id="content-editor" session={{ %{"note_id" => @note_id} }} />
       </div>
 
       <div class="col-span-5" :if={{@note_id == 0}}>

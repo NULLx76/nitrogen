@@ -1,10 +1,12 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+@import "markdown.css";
 
 @layer base {
     html {
         overflow: hidden;
+        color: white;
     }
 
     /* Hide live reload frame */
@@ -12,18 +14,30 @@
         height: 0;
         width: 0;
     }
+
+    table {
+        @apply border-collapse border-2 border-gray-500;
+    }
+
+    th {
+        @apply border border-gray-400 px-4 py-2 text-gray-800;
+    }
+
+    td {
+        @apply border border-gray-400 px-4 py-2 text-center;
+    }
 }
 
 .nav-item {
-    @apply px-3 relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-50 text-gray-600 hover:text-gray-800 border-l-4 border-transparent hover:border-indigo-500 pr-6;
+    @apply px-3 pr-6 relative flex flex-row items-center h-11 focus:outline-none text-white border-l-4 border-transparent hover:bg-gray-800 hover:border-secondary;
 }
 
 .nav-header {
-    @apply relative flex flex-row font-bold items-center h-8 text-gray-800 pr-6;
+    @apply relative flex flex-row font-bold items-center text-green-500 h-8 pr-6;
 }
 
 .toolbar {
-    @apply h-11 px-4 mt-0 mx-2 shadow-md rounded-b-md bg-indigo-600 bg-opacity-75;
+    @apply h-11 px-4 shadow-md bg-surface;
 
     display: grid;
     grid-template-columns: 1fr min-content;
