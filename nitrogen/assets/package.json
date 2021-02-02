@@ -9,6 +9,7 @@
   "dependencies": {
     "@tailwindcss/forms": "^0.2.1",
     "babel-plugin-prismjs": "^2.0.1",
+    "cytoscape": "^3.18.0",
     "monaco-editor": "^0.22.1",
     "nprogress": "^0.2.0",
     "phoenix": "file:../deps/phoenix",

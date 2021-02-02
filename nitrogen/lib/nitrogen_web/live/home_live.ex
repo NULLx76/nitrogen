@@ -52,8 +52,8 @@ defmodule NitrogenWeb.HomeLive do
       </div>
 
       <div class="col-span-5" :if={{@note_id == 0}}>
-        Lorem Ipsum Doler Sit Amet
-        <button class="b-button">button</button>
+        <Component.Graph id="1" notebook_id=1 />
+        <Component.Graph id="2" notebook_id=2 />
       </div>
     </div>
     """

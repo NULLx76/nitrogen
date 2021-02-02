@@ -4,8 +4,11 @@ defmodule Nitrogen.Graph do
   alias Nitrogen.Notes.Notebook
   alias Nitrogen.{Notes, Repo}
 
+  # TODO: Erron handling + tests
   defp links_to_ids(links) do
-    Enum.map(links, fn "/notes/" <> id -> String.to_integer(id) end)
+    Enum.map(links, fn
+      "/notes/" <> id -> String.to_integer(id)
+    end)
   end
 
   @spec build_graph(%Notebook{}) :: Graph.t()
@@ -36,9 +39,8 @@ defmodule Nitrogen.Graph do
   end
 
   @doc """
-  Converts a Graph to valid cytoscape json
+  Converts a Graph to valid cytoscape map
   """
-  @spec to_json(Graph.t()) :: binary()
   def to_json(graph) do
     nodes =
       Enum.reduce(graph.vertices, [], fn {id, v}, acc ->
