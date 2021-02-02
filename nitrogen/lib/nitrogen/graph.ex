@@ -1,23 +1,58 @@
 defmodule Nitrogen.Graph do
-  alias Nitrogen.Notes.Notebook
+  import Ecto.Query, warn: false
 
-  defp links_to_id(links) do
-    Enum.map(links, fn link ->
-      "/notes/" <> id = link
-      String.to_integer(id)
-    end)
+  alias Nitrogen.Notes.Notebook
+  alias Nitrogen.{Notes, Repo}
+
+  defp links_to_ids(links) do
+    Enum.map(links, fn "/notes/" <> id -> String.to_integer(id) end)
   end
 
   @spec build_graph(%Notebook{}) :: Graph.t()
   def build_graph(%Notebook{} = notebook) do
-    {g, e} = Enum.reduce(notebook.notes, {Graph.new(), []}, fn note, {g, edges} ->
-      e = Markdown.extract_links(note.content)
-          |> links_to_id()
-          |> Enum.map(& {note.id, &1})
+    {g, e} =
+      Enum.reduce(notebook.notes, {Graph.new(), []}, fn note, {g, edges} ->
+        e =
+          note.content
+          |> Markdown.extract_links()
+          |> links_to_ids()
+          |> Enum.map(&{note.id, &1})
 
-      {Graph.add_vertex(g, note.id, note.title), e ++ edges}
-    end)
+        g = Graph.add_vertex(g, note.id, note.title)
+        {g, e ++ edges}
+      end)
 
     Graph.add_edges(g, e)
+  end
+
+  @doc """
+  Retrieves a notebook from the db and builds a graph from it.
+  """
+  @spec retrieve_graph(integer()) :: Graph.t()
+  def retrieve_graph(notebook_id) do
+    Notes.get_notebook!(notebook_id)
+    |> Repo.preload(:notes)
+    |> build_graph()
+  end
+
+  @doc """
+  Converts a Graph to valid cytoscape json
+  """
+  @spec to_json(Graph.t()) :: binary()
+  def to_json(graph) do
+    nodes =
+      Enum.reduce(graph.vertices, [], fn {id, v}, acc ->
+        v_label = Graph.Serializer.get_vertex_label(graph, id, v) |> String.trim(~s("))
+        [%{data: %{id: v, label: v_label}} | acc]
+      end)
+
+    edges =
+      Graph.edges(graph)
+      |> Enum.reduce([], fn %Graph.Edge{v1: source, v2: target}, acc ->
+        [%{data: %{id: "#{source}#{target}", source: source, target: target}} | acc]
+      end)
+
+    {:ok, json} = Jason.encode(%{nodes: nodes, edges: edges})
+    json
   end
 end

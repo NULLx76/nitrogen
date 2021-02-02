@@ -1,11 +1,10 @@
 defmodule Nitrogen.GraphTest do
   use Nitrogen.DataCase
-
+  import Nitrogen.Factory
   alias Nitrogen.Notes.{Note, Notebook}
-  alias Nitrogen.Notes
 
-  test "graph construction" do
-    nb = %Notebook{
+  defp test_notebook do
+    %Notebook{
       id: 1,
       name: "Notebook 1",
       notes: [
@@ -31,9 +30,9 @@ defmodule Nitrogen.GraphTest do
         }
       ]
     }
+  end
 
-    g = Nitrogen.Graph.build_graph(nb)
-
+  defp assert_graph(g) do
     assert Graph.has_vertex?(g, 1)
     assert Graph.has_vertex?(g, 2)
     assert Graph.has_vertex?(g, 3)
@@ -52,5 +51,20 @@ defmodule Nitrogen.GraphTest do
              %Graph.Edge{label: nil, v1: 4, v2: 3, weight: 1},
              %Graph.Edge{label: nil, v1: 4, v2: 2, weight: 1}
            ]
+  end
+
+  test "graph construction" do
+    nb = test_notebook()
+
+    Nitrogen.Graph.build_graph(nb)
+    |> assert_graph()
+  end
+
+  test "graph from db retrieval" do
+    nb = %Notebook{test_notebook() | user_id: insert(:user).id}
+    id = insert(nb).id
+
+    Nitrogen.Graph.retrieve_graph(id)
+    |> assert_graph()
   end
 end

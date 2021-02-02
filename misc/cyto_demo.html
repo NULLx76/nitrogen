@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.18.0/cytoscape.min.js"></script>
+    <style>
+        #cy {
+            width: 98vw;
+            height: 98vh;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="cy"></div>
+
+    <script>
+        const cy = cytoscape({
+            container: document.getElementById('cy'), // container to render in
+            style: [{
+                    selector: 'node',
+                    style: {
+                        'background-color': '#333',
+                        'label': 'data(label)'
+                    }
+                },
+
+                {
+                    selector: 'edge',
+                    style: {
+                        'width': 5,
+                        'line-color': '#ccc',
+                        'target-arrow-color': '#ccc',
+                        'target-arrow-shape': 'triangle',
+                        'curve-style': 'bezier'
+                    }
+                }
+            ],
+        });
+
+        // Nitrogen.Graph.to_json();
+        cy.json({
+            elements: {
+                "edges": [{
+                    "data": {
+                        "id": "21",
+                        "source": 2,
+                        "target": 1
+                    }
+                }, {
+                    "data": {
+                        "id": "12",
+                        "source": 1,
+                        "target": 2
+                    }
+                }],
+                "nodes": [{
+                    "data": {
+                        "id": 2,
+                        "label": "Example Note 2"
+                    }
+                }, {
+                    "data": {
+                        "id": 1,
+                        "label": "Example Note"
+                    }
+                }]
+            }
+        });
+
+        // Cose is physics layout engine
+        cy.elements().layout({
+            name: 'cose',
+            nodeDimensionsIncludeLabels: true,
+            animate: false
+        }).run();
+    </script>
+</body>
+
+</html>
