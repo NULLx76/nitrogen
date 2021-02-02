@@ -33,14 +33,11 @@ defmodule Nitrogen.Notes do
     Markdown.render_simple(note.content)
   end
 
-  # Note books
-
+  # Notebooks
   def list_notebooks do
     Repo.all(Notebook)
   end
-
   def get_notebook!(id), do: Repo.get!(Notebook, id)
-
   def create_notebook(attrs \\ %{}) do
     %Notebook{}
     |> Note.changeset(attrs)

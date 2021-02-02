@@ -38,7 +38,7 @@ defmodule NitrogenWeb.NoteLive do
     new_note = %Note{socket.assigns.new_note | title: title}
     socket = assign(socket, new_note: new_note, edit_title: false)
     {:ok, %Note{}} = save_note(socket)
-    NitrogenWeb.Endpoint.broadcast_from(self(), "title-update", "new_note.id", new_note)
+    NitrogenWeb.Endpoint.broadcast_from(self(), "title-update", "event-name", new_note)
     {:noreply, socket}
   end
 
@@ -61,7 +61,6 @@ defmodule NitrogenWeb.NoteLive do
 
     schedule_save()
 
-    {:ok,
-     assign(socket, note: note, new_note: note, content: note.content, md: md, edit_title: false)}
+    {:ok, assign(socket, note: note, new_note: note, content: note.content, md: md, edit_title: false)}
   end
 end

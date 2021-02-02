@@ -49,7 +49,8 @@ defmodule Nitrogen.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:rustler, "~> 0.21.1"},
       {:surface, "~> 0.2.0"},
-      {:ex_machina, "~> 2.5", only: :test}
+      {:ex_machina, "~> 2.5", only: :test},
+      {:libgraph, "~> 0.7"}
     ]
   end
 
