@@ -16,8 +16,9 @@ defmodule Nitrogen.Notes.Notebook do
   @doc false
   def changeset(note, attrs) do
     note
-    |> cast(attrs, [:name, :user, :user_id, :notes])
-    |> validate_required([:name, :user_id])
+    |> cast(attrs, [:name, :user_id])
+    |> cast_assoc(:user)
+    |> cast_assoc(:notes)
     |> foreign_key_constraint(:user_id)
   end
 end

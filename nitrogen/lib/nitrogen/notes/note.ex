@@ -16,7 +16,6 @@ defmodule Nitrogen.Notes.Note do
   def changeset(note, attrs) do
     note
     |> cast(attrs, [:title, :content, :notebook_id])
-    |> validate_required([:title, :notebook_id])
     |> foreign_key_constraint(:notebook_id)
   end
 end

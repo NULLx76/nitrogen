@@ -38,7 +38,7 @@ defmodule NitrogenWeb.NoteLive do
     new_note = %Note{socket.assigns.new_note | title: title}
     socket = assign(socket, new_note: new_note, edit_title: false)
     {:ok, %Note{}} = save_note(socket)
-    NitrogenWeb.Endpoint.broadcast_from(self(), "title-update", "event-name", new_note)
+    Nitrogen.Notes.PubSub.broadcast_note(:update, new_note)
     {:noreply, socket}
   end
 

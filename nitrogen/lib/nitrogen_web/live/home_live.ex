@@ -2,7 +2,6 @@ defmodule NitrogenWeb.HomeLive do
   use NitrogenWeb, :live_view
   alias NitrogenWeb.Component
   alias Nitrogen.User
-  alias Nitrogen.Notes.{Note,Notebook}
 
   @doc "The logged in user"
   data user, :map
@@ -21,20 +20,11 @@ defmodule NitrogenWeb.HomeLive do
   end
 
   @doc """
-  On a `title-update` pubsub event find the relevant note and update it in our notebook list
+  If a notebook update is received, update our internal data
   """
   @impl true
-  def handle_info(%{topic: "title-update", event: _event, payload: new_note}, socket) do
-    notebooks =
-      socket.assigns.user.notebooks
-      |> Enum.map(fn el ->
-        if el.id == new_note.notebook_id do
-          notes = Enum.map(el.notes, &if(&1.id == new_note.id, do: %Note{&1 | title: new_note.title }, else: &1))
-          %Notebook{el | notes: notes}
-        else
-          el
-        end
-      end)
+  def handle_info({:notebook, :update, nb}, socket) do
+    notebooks = Enum.map(socket.assigns.user.notebooks, &if(&1.id == nb.id, do: nb, else: &1))
 
     {:noreply, assign(socket, user: %User{socket.assigns.user | notebooks: notebooks})}
   end
@@ -43,10 +33,12 @@ defmodule NitrogenWeb.HomeLive do
   def mount(_params, %{"user" => user}, socket) do
     user = User.get_user_and_notes!(user.id)
 
-    NitrogenWeb.Endpoint.subscribe("title-update")
+    for nb <- user.notebooks do
+      Nitrogen.Notes.PubSub.subscribe_notebook(nb.id)
+    end
+
     {:ok, assign(socket, user: user)}
   end
-
 
   @impl true
   def render(assigns) do

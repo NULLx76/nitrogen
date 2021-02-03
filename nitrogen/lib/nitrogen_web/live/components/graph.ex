@@ -19,7 +19,10 @@ defmodule NitrogenWeb.Component.Graph do
   @impl true
   def render(assigns) do
     ~H"""
-    <div id="cy-{{ @id }}" class="cy" data-graph={{ @graph }} phx-hook="CytoScape"></div>
+    <div>
+      <div id="cy-{{ @id }}-container" class="cy" phx-update="ignore"></div>
+      <div id="cy-{{ @id }}" phx-hook="CytoScape" data-graph={{ @graph }}></div>
+    </div>
     """
   end
 end

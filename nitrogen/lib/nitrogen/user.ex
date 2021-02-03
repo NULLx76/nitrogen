@@ -17,7 +17,6 @@ defmodule Nitrogen.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:name, :notes])
-    |> validate_required([:name])
   end
 
   def list_users do

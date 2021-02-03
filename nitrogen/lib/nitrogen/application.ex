@@ -14,9 +14,9 @@ defmodule Nitrogen.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Nitrogen.PubSub},
       # Start the Endpoint (http/https)
-      NitrogenWeb.Endpoint
-      # Start a worker by calling: Nitrogen.Worker.start_link(arg)
-      # {Nitrogen.Worker, arg}
+      NitrogenWeb.Endpoint,
+      # Start the notes watchdog
+      Nitrogen.Notes.Watchdog
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

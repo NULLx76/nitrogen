@@ -66,12 +66,14 @@ Hooks.StealFocus = {
 
 import cytoscape from "cytoscape"
 Hooks.CytoScape = {
-    graph() { return JSON.parse(this.el.dataset.graph) }, 
+    graph() {     
+        return JSON.parse(document.getElementById(this.el.id).dataset.graph)
+    }, 
     mounted() {
-        console.log(this.graph())
+        this.container = document.getElementById(this.el.id + "-container");
 
         this.cy = cytoscape({
-            container: this.el,
+            container: this.container,
             elements: this.graph(),
             style: [{
                     selector: 'node',
@@ -101,6 +103,11 @@ Hooks.CytoScape = {
     },
     updated() {
         this.cy.json({elements: this.graph()})
+        // this.cy.elements().layout({
+        //     name: 'cose',
+        //     nodeDimensionsIncludeLabels: true,
+        //     animate: false
+        // }).run();
     }
 }
 
