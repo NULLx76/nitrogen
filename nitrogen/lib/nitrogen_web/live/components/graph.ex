@@ -1,22 +1,17 @@
 defmodule NitrogenWeb.Component.Graph do
   use Surface.LiveComponent
 
-  prop notebook_id, :integer, required: true
-
-  data graph, :any
-
-  @impl true
-  def preload(list_of_assigns) do
-    list_of_assigns
-  end
+  prop notebook, :map, required: true
+  data graph, :map
 
   @impl true
   def update(assigns, socket) do
-    data = Nitrogen.Graph.retrieve_graph(assigns.notebook_id)
+    graph =
+      Nitrogen.Graph.build_graph(assigns.notebook)
       |> Nitrogen.Graph.to_json()
 
     socket = assign(socket, assigns)
-    socket = assign(socket, graph: data)
+    socket = assign(socket, graph: graph)
 
     {:ok, assign(socket, assigns)}
   end
@@ -24,7 +19,7 @@ defmodule NitrogenWeb.Component.Graph do
   @impl true
   def render(assigns) do
     ~H"""
-    <div id="cy-{{ @id }}" style="width: 500px; height: 500px; display: block;" data-graph={{ @graph }} phx-hook="CytoScape"></div>
+    <div id="cy-{{ @id }}" class="cy" data-graph={{ @graph }} phx-hook="CytoScape"></div>
     """
   end
 end

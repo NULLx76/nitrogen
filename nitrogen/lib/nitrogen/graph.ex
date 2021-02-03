@@ -4,7 +4,7 @@ defmodule Nitrogen.Graph do
   alias Nitrogen.Notes.Notebook
   alias Nitrogen.{Notes, Repo}
 
-  # TODO: Erron handling + tests
+  # TODO: Error handling + tests
   defp links_to_ids(links) do
     Enum.map(links, fn
       "/notes/" <> id -> String.to_integer(id)

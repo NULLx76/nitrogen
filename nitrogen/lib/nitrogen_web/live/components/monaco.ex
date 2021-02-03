@@ -5,7 +5,7 @@ defmodule NitrogenWeb.Component.Monaco do
 
   def render(assigns) do
     ~H"""
-    <div id="monaco-editor" phx-hook="MonacoEditor" data-raw="{{ @raw_md }}"></div>
+    <div id="monaco-editor" phx-hook="MonacoEditor" data-raw="{{ @raw_md }}" phx-update="ignore"></div>
     """
   end
 end

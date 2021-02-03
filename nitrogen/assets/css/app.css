@@ -49,7 +49,7 @@
     height: calc(100% - 3rem);
 }
 
-#monaco-editor {
+#monaco-editor, .cy {
     position: absolute;
     top: 0;
     left: 0;

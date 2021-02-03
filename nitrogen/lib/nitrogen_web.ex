@@ -43,7 +43,7 @@ defmodule NitrogenWeb do
 
   def live_view do
     quote do
-      use Phoenix.LiveView,
+      use Surface.LiveView,
         layout: {NitrogenWeb.LayoutView, "live.html"}
 
       unquote(view_helpers())
