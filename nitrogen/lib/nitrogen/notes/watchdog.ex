@@ -23,7 +23,11 @@ defmodule Nitrogen.Notes.Watchdog do
   @impl true
   def handle_info({:note, :update, %Note{} = note}, state) do
     state =
-      Map.update(state, note.notebook_id, Notes.get_notebook!(note.notebook_id), fn current ->
+      state
+      |> Map.put_new_lazy(note.notebook_id, fn ->
+        Notes.get_notebook!(note.notebook_id) |> Repo.preload(:notes)
+      end)
+      |> Map.update!(note.notebook_id, fn current ->
         notes = Enum.map(current.notes, &if(&1.id == note.id, do: note, else: &1))
         %Notebook{current | notes: notes}
       end)
@@ -35,7 +39,7 @@ defmodule Nitrogen.Notes.Watchdog do
 
   @impl true
   def handle_info({:notebook, :update, %Notebook{} = nb}, state) do
-    IO.inspect(nb)
+    state = Map.put(state, nb.id, Repo.preload(nb, :notes))
     {:noreply, state}
   end
 end

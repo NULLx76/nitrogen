@@ -10,6 +10,7 @@ defmodule NitrogenWeb.Component.GraphGrid do
   defp calculate_grid(n) when is_integer(n) do
     cols = ceil(:math.sqrt(n))
     rows = ceil(n / cols)
+
     "grid-template-columns: repeat(#{cols},minmax(0,1fr)); grid-template-rows: repeat(#{rows},minmax(0,1fr))"
   end
 

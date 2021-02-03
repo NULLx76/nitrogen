@@ -5,9 +5,15 @@ defmodule Nitrogen.Graph do
   alias Nitrogen.{Notes, Repo}
 
   # TODO: Error handling + tests
-  defp links_to_ids(links) do
-    Enum.map(links, fn
-      "/notes/" <> id -> String.to_integer(id)
+  def links_to_ids(links) do
+    links
+    |> Enum.reduce([], fn el, acc ->
+      with "/notes/" <> id <- el,
+           {n, ""} <- Integer.parse(id) do
+        [n | acc]
+      else
+        _ -> acc
+      end
     end)
   end
 

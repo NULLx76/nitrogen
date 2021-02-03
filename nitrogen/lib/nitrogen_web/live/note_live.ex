@@ -17,7 +17,9 @@ defmodule NitrogenWeb.NoteLive do
   end
 
   defp save_note(socket) do
-    Notes.update_note(socket.assigns.note, Map.from_struct(socket.assigns.new_note))
+    {:ok, note} = Notes.update_note(socket.assigns.note, Map.from_struct(socket.assigns.new_note))
+    Nitrogen.Notes.PubSub.broadcast_note(:update, note)
+    note
   end
 
   @impl true
@@ -37,21 +39,20 @@ defmodule NitrogenWeb.NoteLive do
   def handle_event("save-title", %{"title" => title}, socket) do
     new_note = %Note{socket.assigns.new_note | title: title}
     socket = assign(socket, new_note: new_note, edit_title: false)
-    {:ok, %Note{}} = save_note(socket)
-    Nitrogen.Notes.PubSub.broadcast_note(:update, new_note)
+    save_note(socket)
     {:noreply, socket}
   end
 
   @impl true
   def handle_info(@sched_store, socket) do
-    {:ok, note} = save_note(socket)
+    note = save_note(socket)
     schedule_save()
     {:noreply, assign(socket, note: note, new_note: note)}
   end
 
   @impl true
   def terminate(_reason, socket) do
-    {:ok, %Note{}} = save_note(socket)
+    save_note(socket)
     :ok
   end
 
@@ -61,6 +62,7 @@ defmodule NitrogenWeb.NoteLive do
 
     schedule_save()
 
-    {:ok, assign(socket, note: note, new_note: note, content: note.content, md: md, edit_title: false)}
+    {:ok,
+     assign(socket, note: note, new_note: note, content: note.content, md: md, edit_title: false)}
   end
 end

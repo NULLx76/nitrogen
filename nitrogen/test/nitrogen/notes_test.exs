@@ -32,13 +32,14 @@ defmodule Nitrogen.NotesTest do
 
     test "get notebook, modify and save" do
       initial = insert(:notebook)
+
       notebook =
         Notes.get_notebook!(initial.id)
         |> Nitrogen.Repo.preload(:notes)
 
       assert length(notebook.notes) == 0
 
-      notebook = %{id: notebook.id, notes: [%{title: "Some New Note", content: "42"}] }
+      notebook = %{id: notebook.id, notes: [%{title: "Some New Note", content: "42"}]}
 
       {:ok, _} = Notes.update_notebook(%Notebook{id: initial.id}, notebook)
 

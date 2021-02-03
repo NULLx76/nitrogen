@@ -67,4 +67,9 @@ defmodule Nitrogen.GraphTest do
     Nitrogen.Graph.retrieve_graph(id)
     |> assert_graph()
   end
+
+  test "link to id conversion" do
+    links = ["google.com", "/notes/42", "/notes/", "/notes", "/notes/ ", "/notes/1"]
+    assert Nitrogen.Graph.links_to_ids(links) == [1, 42]
+  end
 end
