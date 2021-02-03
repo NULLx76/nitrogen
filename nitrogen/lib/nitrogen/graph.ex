@@ -4,7 +4,7 @@ defmodule Nitrogen.Graph do
   alias Nitrogen.Notes.Notebook
   alias Nitrogen.{Notes, Repo}
 
-  # TODO: Error handling + tests
+  @spec links_to_ids([binary()]) :: [integer()]
   def links_to_ids(links) do
     links
     |> Enum.reduce([], fn el, acc ->
@@ -20,16 +20,19 @@ defmodule Nitrogen.Graph do
   @spec build_graph(%Notebook{}) :: Graph.t()
   def build_graph(%Notebook{} = notebook) do
     {g, e} =
-      Enum.reduce(notebook.notes, {Graph.new(), []}, fn note, {g, edges} ->
+      Enum.reduce(notebook.notes, {Graph.new, []}, fn note, {g, edges} ->
         e =
           note.content
           |> Markdown.extract_links()
           |> links_to_ids()
           |> Enum.map(&{note.id, &1})
 
-        g = Graph.add_vertex(g, note.id, note.title)
-        {g, e ++ edges}
+        {Graph.add_vertex(g, note.id, note.title), e ++ edges}
       end)
+
+    # Prune edges to non existing nodes
+    vx = Graph.vertices(g)
+    e = Enum.filter(e, &(elem(&1, 0) in vx and elem(&1, 1) in vx))
 
     Graph.add_edges(g, e)
   end
@@ -45,8 +48,9 @@ defmodule Nitrogen.Graph do
   end
 
   @doc """
-  Converts a Graph to valid cytoscape map
+  Converts a Graph to valid cytoscape JSON
   """
+  @spec to_json(Graph.t()) :: binary()
   def to_json(graph) do
     nodes =
       Enum.reduce(graph.vertices, [], fn {id, v}, acc ->
@@ -60,7 +64,6 @@ defmodule Nitrogen.Graph do
         [%{data: %{id: "#{source}#{target}", source: source, target: target}} | acc]
       end)
 
-    {:ok, json} = Jason.encode(%{nodes: nodes, edges: edges})
-    json
+    Jason.encode!(%{nodes: nodes, edges: edges})
   end
 end

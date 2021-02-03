@@ -7,8 +7,8 @@ defmodule NitrogenWeb.Component.Navigation do
   prop notebooks, :list, required: true
 
   @impl true
-  def handle_event("add-notebook", _, socket) do
-    Component.NewNotebook.show("dialog")
+  def handle_event("add-note", _, socket) do
+    Component.NewNote.show("new-note")
     {:noreply, socket}
   end
 
@@ -26,9 +26,9 @@ defmodule NitrogenWeb.Component.Navigation do
           </li>
         </ul>
         <footer class="bottom-0 left-0 p-4 sticky flex flex-column z-10 justify-around">
-          <Component.NewNotebook id="dialog" />
+          <Component.NewNote id="new-note" />
           <div class="nav-header rounded-md shadow-md w-5/6 bg-secondary flex px-2 justify-center">
-            <button class="text-black" :on-click="add-notebook">new notebook</button>
+            <button class="text-black" :on-click="add-note">new notebook</button>
           </div>
         </footer>
     </nav>
