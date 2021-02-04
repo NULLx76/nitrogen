@@ -9,9 +9,9 @@ defmodule Markdown.BencheeTest do
         "earmark" => fn input -> Earmark.as_html!(input) end
       },
       inputs: %{
-        "simple test" => "# Yeet",
-        "simple local link" => "[example](/example)",
-        "complex file" => File.read!("./test/markdown/test.md")
+        "simple" => "# Yeet",
+        "simple link" => "[example](/example)",
+        "complex" => File.read!("./test/markdown/test.md")
       }
     ).scenarios
     |> Enum.map(&%{name: &1.name, avg: &1.run_time_data.statistics.average, input: &1.input_name})

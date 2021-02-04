@@ -21,15 +21,15 @@ defmodule Nitrogen.Notes.Watchdog do
   end
 
   @impl true
-  def handle_info({:note, :update, %Note{} = note}, state) do
+  def handle_info({:note, action, %Note{} = note}, state) when action in [:update, :create] do
     state =
       state
       |> Map.put_new_lazy(note.notebook_id, fn ->
         Notes.get_notebook!(note.notebook_id) |> Repo.preload(:notes)
       end)
       |> Map.update!(note.notebook_id, fn current ->
-        notes = Enum.map(current.notes, &if(&1.id == note.id, do: note, else: &1))
-        %Notebook{current | notes: notes}
+        notes = Enum.reject(current.notes, & &1.id == note.id)
+        %Notebook{current | notes: [note | notes]}
       end)
 
     PubSub.broadcast_notebook(:update, Map.fetch!(state, note.notebook_id))

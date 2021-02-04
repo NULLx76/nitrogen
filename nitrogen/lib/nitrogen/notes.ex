@@ -30,7 +30,7 @@ defmodule Nitrogen.Notes do
   end
 
   def render_note(%Note{} = note) do
-    Markdown.render_simple(note.content)
+    Markdown.render_simple(note.content || "")
   end
 
   # Notebooks

@@ -3,6 +3,14 @@
 @import "tailwindcss/utilities";
 @import "markdown.css";
 
+:root {
+    --primary-color: rgb(245, 158, 11);
+    --primary-variant-color: #6932ff;
+    --secondary-color: rgb(16, 185, 129);
+    --surface-color: #121212;
+    --error-color: #CF6679;
+} 
+
 @layer base {
     html {
         overflow: hidden;
@@ -32,6 +40,10 @@
     @apply px-3 pr-6 relative flex flex-row items-center h-11 focus:outline-none text-white border-l-4 border-transparent hover:bg-gray-800 hover:border-secondary;
 }
 
+.nav-new-item {
+    @apply px-3 pr-6 relative flex flex-row items-center h-11 focus:outline-none text-white border-l-4 border-transparent bg-gray-800 border-secondary;
+}
+
 .nav-header {
     @apply relative flex flex-row font-bold items-center text-green-500 h-8 pr-6;
 }
@@ -49,7 +61,8 @@
     height: calc(100% - 3rem);
 }
 
-#monaco-editor, .cy {
+#monaco-editor,
+.cy {
     position: absolute;
     top: 0;
     left: 0;
@@ -62,4 +75,9 @@
 
 #content-editor {
     height: 100%;
+}
+
+.plus {
+    color: transparent;
+    text-shadow: 0 0 0 grey;
 }

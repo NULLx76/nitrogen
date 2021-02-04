@@ -62,6 +62,6 @@ defmodule NitrogenWeb.NoteLive do
 
     schedule_save()
 
-    {:ok, assign(socket, note: note, new_note: note, content: note.content)}
+    {:ok, assign(socket, note: note, new_note: note, content: note.content, md: md)}
   end
 end

@@ -29,7 +29,7 @@ Nitrogen.Repo.insert!(%Nitrogen.Notes.Note{
   title: "Example Note",
   content: "# Example Note
 
-  * [Note 2](/notes/2)
+  * [Note 2](/note/2)
   ",
   notebook_id: notebook
 })
@@ -38,7 +38,7 @@ Nitrogen.Repo.insert!(%Nitrogen.Notes.Note{
   title: "Example Note 2",
   content: "# Example Note 2
 
-  * [Note 1](/notes/1)
+  * [Note 1](/note/1)
   ",
   notebook_id: notebook
 })

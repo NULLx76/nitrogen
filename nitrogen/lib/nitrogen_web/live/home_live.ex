@@ -43,14 +43,14 @@ defmodule NitrogenWeb.HomeLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="grid grid-cols-6 grid-rows-1 h-full">
+    <div class="grid h-full grid-rows-1" style="grid-template-columns: max-content 1fr">
       <Component.Navigation id="nav" notebooks={{ @user.notebooks }}/>
 
-      <div class="col-span-5 h-screen" :if={{@note_id > 0}}>
+      <div class="h-screen" :if={{@note_id > 0}}>
         <NitrogenWeb.NoteLive id="content-editor" session={{ %{"note_id" => @note_id} }} />
       </div>
 
-      <div class="col-span-5" :if={{@note_id == 0}}>
+      <div class="w-full" :if={{@note_id == 0}}>
         <Component.GraphGrid notebooks={{ @user.notebooks }} />
       </div>
     </div>

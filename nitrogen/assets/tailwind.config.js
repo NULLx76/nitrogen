@@ -10,11 +10,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'primary': 'rgb(245, 158, 11)',
-        'primary-variant': '#3700B3',
-        'secondary': 'rgb(16, 185, 129)',
-        'surface': '#121212',
-        'error': '#CF6679',
+        'primary': 'var(--primary-color)',
+        'primary-variant': 'var(--primary-variant-color)',
+        'secondary': 'var(--secondary-color)',
+        'surface': 'var(--surface-color)',
+        'error': 'var(--error-color)',
       }
     },
   },

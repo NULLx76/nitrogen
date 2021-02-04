@@ -9,7 +9,7 @@ defmodule Nitrogen.Graph do
   def links_to_ids(links) do
     links
     |> Enum.reduce([], fn el, acc ->
-      with "/notes/" <> id <- el,
+      with "/note/" <> id <- el,
            {n, ""} <- Integer.parse(id) do
         [n | acc]
       else
@@ -23,8 +23,7 @@ defmodule Nitrogen.Graph do
     {g, e} =
       Enum.reduce(notebook.notes, {Graph.new(), []}, fn note, {g, edges} ->
         e =
-          note.content
-          |> Markdown.extract_links()
+          Markdown.extract_links(note.content || "")
           |> links_to_ids()
           |> Enum.map(&{note.id, &1})
 

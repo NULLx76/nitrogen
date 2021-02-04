@@ -57,18 +57,22 @@ Hooks.Prism = {
 
 Hooks.StealFocus = {
     updated() {
-        const input = document.getElementById("editor-form-title-input");
-        if (input) {
-            input.select();
+        // On update find the first text field and focus it.
+        const inputs = this.el.getElementsByTagName("input");
+        for(const field of inputs){
+            if(field.type == "text") {
+                field.select();
+                break;
+            }
         }
     }
 }
 
 import cytoscape from "cytoscape"
 Hooks.CytoScape = {
-    graph() {     
+    graph() {
         return JSON.parse(document.getElementById(this.el.id).dataset.graph)
-    }, 
+    },
     mounted() {
         this.container = document.getElementById(this.el.id + "-container");
 
@@ -102,7 +106,9 @@ Hooks.CytoScape = {
         }).run();
     },
     updated() {
-        this.cy.json({elements: this.graph()})
+        this.cy.json({
+            elements: this.graph()
+        })
         // this.cy.elements().layout({
         //     name: 'cose',
         //     nodeDimensionsIncludeLabels: true,

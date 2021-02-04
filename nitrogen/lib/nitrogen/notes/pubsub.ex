@@ -4,7 +4,7 @@ defmodule Nitrogen.Notes.PubSub do
 
   @pubsub Nitrogen.PubSub
 
-  @actions [:update]
+  @actions [:update, :create]
 
   # Note Topics
   def note_topic(), do: "#{inspect(__MODULE__)}-note"
