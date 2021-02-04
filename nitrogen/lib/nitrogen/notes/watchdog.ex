@@ -28,7 +28,7 @@ defmodule Nitrogen.Notes.Watchdog do
         Notes.get_notebook!(note.notebook_id) |> Repo.preload(:notes)
       end)
       |> Map.update!(note.notebook_id, fn current ->
-        notes = Enum.reject(current.notes, & &1.id == note.id)
+        notes = Enum.reject(current.notes, &(&1.id == note.id))
         %Notebook{current | notes: [note | notes]}
       end)
 
