@@ -8,7 +8,7 @@ defmodule NitrogenWeb.Component.Graph do
   def update(assigns, socket) do
     graph =
       Nitrogen.Graph.build_graph(assigns.notebook)
-      |> Nitrogen.Graph.to_json()
+      |> Nitrogen.Graph.to_json!()
 
     socket = assign(socket, assigns)
     socket = assign(socket, graph: graph)

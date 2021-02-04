@@ -48,9 +48,11 @@ defmodule Nitrogen.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:rustler, "~> 0.21.1"},
-      {:surface, "~> 0.2.0"},
+      {:surface, "~> 0.2.1"},
       {:ex_machina, "~> 2.5", only: :test},
-      {:libgraph, "~> 0.7"}
+      {:libgraph, "~> 0.7"},
+      {:benchee, "~> 1.0", only: [:dev, :test]},
+      {:earmark, "~> 1.4"}
     ]
   end
 

@@ -2,6 +2,7 @@ defmodule Nitrogen.Graph do
   import Ecto.Query, warn: false
 
   alias Nitrogen.Notes.Notebook
+  alias Nitrogen.Graph.CytoSerializer
   alias Nitrogen.{Notes, Repo}
 
   @spec links_to_ids([binary()]) :: [integer()]
@@ -20,7 +21,7 @@ defmodule Nitrogen.Graph do
   @spec build_graph(%Notebook{}) :: Graph.t()
   def build_graph(%Notebook{} = notebook) do
     {g, e} =
-      Enum.reduce(notebook.notes, {Graph.new, []}, fn note, {g, edges} ->
+      Enum.reduce(notebook.notes, {Graph.new(), []}, fn note, {g, edges} ->
         e =
           note.content
           |> Markdown.extract_links()
@@ -47,14 +48,26 @@ defmodule Nitrogen.Graph do
     |> build_graph()
   end
 
-  @doc """
-  Converts a Graph to valid cytoscape JSON
+  @spec to_json!(Graph.t()) :: binary()
+  def to_json!(graph) do
+    {:ok, json} = CytoSerializer.serialize(graph)
+    json
+  end
+end
+
+defmodule Nitrogen.Graph.CytoSerializer do
+  @moduledoc """
+  This serializer converts a `Graph` to valid Cytoscape.js JSON.
   """
-  @spec to_json(Graph.t()) :: binary()
-  def to_json(graph) do
+
+  use Graph.Serializer
+  alias Graph.Serializer
+
+  @spec serialize(Graph.t()) :: {:ok, String.t()}
+  def serialize(graph) do
     nodes =
       Enum.reduce(graph.vertices, [], fn {id, v}, acc ->
-        v_label = Graph.Serializer.get_vertex_label(graph, id, v) |> String.trim(~s("))
+        v_label = Serializer.get_vertex_label(graph, id, v) |> String.trim(~s("))
         [%{data: %{id: v, label: v_label}} | acc]
       end)
 
@@ -64,6 +77,6 @@ defmodule Nitrogen.Graph do
         [%{data: %{id: "#{source}#{target}", source: source, target: target}} | acc]
       end)
 
-    Jason.encode!(%{nodes: nodes, edges: edges})
+    {:ok, Jason.encode!(%{nodes: nodes, edges: edges})}
   end
 end
