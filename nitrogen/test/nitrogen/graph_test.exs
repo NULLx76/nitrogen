@@ -11,22 +11,22 @@ defmodule Nitrogen.GraphTest do
         %Note{
           id: 1,
           title: "Note 1",
-          content: "[Note 2](/notes/2)"
+          content: "[Note 2](/note/2)"
         },
         %Note{
           id: 2,
           title: "Note 2",
-          content: "[Note 1](/notes/1)"
+          content: "[Note 1](/note/1)"
         },
         %Note{
           id: 3,
           title: "Note 3",
-          content: "[Note 1](/notes/1)\n[Note 2](/notes/2)"
+          content: "[Note 1](/note/1)\n[Note 2](/note/2)"
         },
         %Note{
           id: 4,
           title: "Note 4",
-          content: "[Note 3](/notes/3)\n[Note 2](/notes/2)\n[Note 1](/notes/1)"
+          content: "[Note 3](/note/3)\n[Note 2](/note/2)\n[Note 1](/note/1)"
         }
       ]
     }
@@ -69,7 +69,7 @@ defmodule Nitrogen.GraphTest do
   end
 
   test "link to id conversion" do
-    links = ["google.com", "/notes/42", "/notes/", "/notes", "/notes/ ", "/notes/1"]
+    links = ["google.com", "/note/42", "/notes/5", "/notes", "/note/ ", "/note/1"]
     assert Nitrogen.Graph.links_to_ids(links) == [1, 42]
   end
 end
