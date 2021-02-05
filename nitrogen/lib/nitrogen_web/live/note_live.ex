@@ -7,28 +7,20 @@ defmodule NitrogenWeb.NoteLive do
   alias NitrogenWeb.Component
   alias NitrogenWeb.Router.Helpers, as: Routes
 
-  @sched_store :store
-
   data note, :any
   data new_note, :any
-  data content, :string, default: ""
   data md, :string, default: ""
   data edit_title, :boolean, default: false
   data show_md, :boolean, default: true
 
-  defp schedule_save do
-    Process.send_after(self(), @sched_store, 5_000)
-  end
-
-  defp save_note(socket) do
-    {:ok, note} = Notes.update_note(socket.assigns.note, Map.from_struct(socket.assigns.new_note))
-    Nitrogen.Notes.PubSub.broadcast_note(:update, note)
-    note
+  defp save_note(%Note{} = new_note) do
+    Notes.PubSub.broadcast_note(:update, new_note)
+    new_note
   end
 
   @impl true
   def handle_event("update", %{"value" => raw}, socket) do
-    new_note = %Note{socket.assigns.new_note | content: raw}
+    new_note = save_note(%Note{socket.assigns.new_note | content: raw})
     md = Notes.render_note(new_note)
 
     {:noreply, assign(socket, new_note: new_note, md: md)}
@@ -39,10 +31,9 @@ defmodule NitrogenWeb.NoteLive do
   end
 
   def handle_event("save-title", %{"title" => title}, socket) do
-    new_note = %Note{socket.assigns.new_note | title: title}
-    socket = assign(socket, new_note: new_note, edit_title: false)
-    save_note(socket)
-    {:noreply, socket}
+    # TODO: Handle state from the watchdog
+    {:ok, new_note} = Notes.update_note(socket.assigns.note, %{title: title})
+    {:noreply, assign(socket, new_note: save_note(new_note), edit_title: false)}
   end
 
   def handle_event("toggle-md", _, socket) do
@@ -50,15 +41,8 @@ defmodule NitrogenWeb.NoteLive do
   end
 
   @impl true
-  def handle_info(@sched_store, socket) do
-    note = save_note(socket)
-    schedule_save()
-    {:noreply, assign(socket, note: note, new_note: note)}
-  end
-
-  @impl true
-  def terminate(_reason, socket) do
-    save_note(socket)
+  def terminate(_reason, %{assigns: %{new_note: note}}) do
+    save_note(note)
     :ok
   end
 
@@ -66,8 +50,7 @@ defmodule NitrogenWeb.NoteLive do
     note = Notes.get_note!(id)
     md = Notes.render_note(note)
 
-    schedule_save()
-
-    {:ok, assign(socket, note: note, new_note: note, content: note.content, md: md)}
+    {:ok, assign(socket, note: note, new_note: note, md: md),
+     temporary_assigns: [initial_content: note.content]}
   end
 end

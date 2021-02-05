@@ -39,7 +39,7 @@ defmodule NitrogenWeb.Router do
 
     scope "/" do
       pipe_through :browser
-      live_dashboard "/dashboard", metrics: NitrogenWeb.Telemetry
+      live_dashboard "/dashboard", metrics: NitrogenWeb.Telemetry, ecto_repos: [Nitrogen.Repo]
     end
   end
 end

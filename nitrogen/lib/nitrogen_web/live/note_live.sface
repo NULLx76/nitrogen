@@ -22,7 +22,7 @@
     <!-- Editor -->
     <div class="editor flex-grow flex flex-row overflow-y-auto">
         <div class={{"relative", "transition-all", "w-1/2": @show_md, "w-full": !@show_md}}>
-            <Component.Monaco id="monaco-editor" raw_md={{ @content }} />
+            <Component.Monaco id="monaco-editor" raw_md={{ @initial_content }} />
         </div>
         <div class="output overflow-y-auto" :if={{ @show_md }}>
             <Component.MarkdownPreview md={{ @md }} />

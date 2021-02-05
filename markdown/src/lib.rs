@@ -1,23 +1,48 @@
-use pulldown_cmark::{Parser, Options, html, Tag, Event};
+use pulldown_cmark::{
+    escape::{escape_href, escape_html},
+    html, CowStr, Event, LinkType, Options, Parser, Tag,
+};
 
-pub fn render_simple(input: &str) -> String {
-    let parser = Parser::new_ext(input, Options::all());
-
-    let mut output = String::new();
-    html::push_html(&mut output, parser);
-    output
-}
-
-fn extract_links_from_parser<'a>(p: impl Iterator<Item=Event<'a>>, l: &'a mut Vec<String>) -> impl Iterator<Item=Event<'a>> {
+fn extract_links_from_parser<'a>(
+    p: impl Iterator<Item = Event<'a>>,
+    l: &'a mut Vec<String>,
+) -> impl Iterator<Item = Event<'a>> {
     p.map(move |event| match event {
-        Event::Start(Tag::Link(_, ref dest,_)) => {
+        Event::Start(Tag::Link(_, ref dest, _)) => {
             if dest.starts_with('/') {
                 l.push(dest.clone().into_string());
             }
             event
-        },
-        _ => event
+        }
+        _ => event,
     })
+}
+
+fn phoenixify_links(e: Event) -> Event {
+    match e {
+        Event::Start(Tag::Link(LinkType::Email, _, _)) => e,
+        Event::Start(Tag::Link(_, dest, title)) if dest.starts_with('/') => {
+            let mut html = String::new();
+            html.push_str("<a data-phx-link=\"redirect\" data-phx-link-state=\"push\" href=\"");
+            escape_href(&mut html, &dest).unwrap();
+            if !title.is_empty() {
+                html.push_str("\" title=\"");
+                escape_html(&mut html, &title).unwrap();
+            }
+            html.push_str("\">");
+
+            Event::Html(CowStr::Boxed(html.into_boxed_str()))
+        }
+        _ => e,
+    }
+}
+
+pub fn render_simple(input: &str) -> String {
+    let parser = Parser::new_ext(input, Options::all());
+    let parser = parser.map(phoenixify_links);
+    let mut output = String::new();
+    html::push_html(&mut output, parser);
+    output
 }
 
 pub fn extract_links(input: &str) -> Vec<String> {
@@ -32,22 +57,32 @@ pub fn render_and_extract_links(input: &str) -> (String, Vec<String>) {
 
     let mut local_links = Vec::new();
     let parser = extract_links_from_parser(parser, &mut local_links);
+    let parser = parser.map(phoenixify_links);
 
     let mut output = String::new();
     html::push_html(&mut output, parser);
     (output, local_links)
 }
 
-
 #[cfg(test)]
 mod tests {
-    use pulldown_cmark::{Parser, Options, html, BrokenLink, LinkType};
+    use pulldown_cmark::{html, BrokenLink, LinkType, Options, Parser};
 
     use super::*;
 
     #[test]
+    fn test_phoenixify_links() {
+        let input = "[Inline Link](/notes/1) [External link](http://example.com)";
+        let output = render_simple(input);
+
+        let expected = "<p><a data-phx-link=\"redirect\" data-phx-link-state=\"push\" href=\"/notes/1\">Inline Link</a> <a href=\"http://example.com\">External link</a></p>\n";
+        assert_eq!(expected, output);
+    }
+
+    #[test]
     fn extract_link() {
-        let (_, links) = render_and_extract_links("[Inline Link](/notes/1) [External link](http://example.com)");
+        let (_, links) =
+            render_and_extract_links("[Inline Link](/notes/1) [External link](http://example.com)");
         assert_eq!(vec!["/notes/1"], links);
 
         let (_, links) = render_and_extract_links("[Shortcut Link]\n\n[Shortcut Link]: /notes/1");
@@ -66,7 +101,8 @@ mod tests {
 
         let output = render_simple(input);
 
-        let expected = "<p>Hello world, this is a <del>complicated</del> <em>very simple</em> example.</p>\n";
+        let expected =
+            "<p>Hello world, this is a <del>complicated</del> <em>very simple</em> example.</p>\n";
 
         assert_eq!(expected, &output);
     }
@@ -87,7 +123,8 @@ mod tests {
             }
         };
 
-        let parser = Parser::new_with_broken_link_callback(input, Options::empty(), Some(&mut callback));
+        let parser =
+            Parser::new_with_broken_link_callback(input, Options::empty(), Some(&mut callback));
 
         let mut output = String::new();
         html::push_html(&mut output, parser);
@@ -97,4 +134,3 @@ mod tests {
         assert_eq!(expected, &output);
     }
 }
-
