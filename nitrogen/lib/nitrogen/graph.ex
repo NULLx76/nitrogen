@@ -48,6 +48,9 @@ defmodule Nitrogen.Graph do
   end
 
   @spec to_json!(Graph.t()) :: binary()
+  @doc """
+  Calls `Nitrogen.Graph.CytoSerializer.serialize(arg0)` but raises an error instead of retuning gracefully.
+  """
   def to_json!(graph) do
     {:ok, json} = CytoSerializer.serialize(graph)
     json

@@ -1,11 +1,11 @@
 defmodule NitrogenWeb.Component.Navigation do
   use Surface.LiveComponent
-  alias Surface.Components.{LiveRedirect, Form}
-  alias Surface.Components.Form.{TextInput, HiddenInput}
+  alias Surface.Components.LiveRedirect
   alias NitrogenWeb.Router.Helpers, as: Routes
   alias NitrogenWeb.Component
 
   prop notebooks, :list, required: true
+  prop current_note, :integer, default: 0
   data add_note, :integer, default: 0
 
   @impl true
@@ -25,13 +25,13 @@ defmodule NitrogenWeb.Component.Navigation do
         %{notebook | notes: notes}
       end)
 
-    {:ok, assign(socket, notebooks: notebooks)}
+    {:ok, assign(socket, notebooks: notebooks, current_note: assigns.current_note)}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <nav class="overflow-y-auto overflow-x-hidden pt-2 px-4 bg-surface shadow-r-md relative">
+    <nav class="overflow-y-auto overflow-x-hidden pt-2 px-4 bg-surface shadow-r-md relative transition duration-500 ease-in-out transform ">
       <header>
         <h2 class="text-4xl text-primary-variant font-bold text-center"><LiveRedirect to={{ Routes.home_path(@socket, :index) }}>Nitrogen</LiveRedirect></h2>
       </header>
@@ -40,10 +40,10 @@ defmodule NitrogenWeb.Component.Navigation do
           {{ item.name }}
           <button class="text-sm text-secondary ml-2 plus" :on-click={{ "new-note-#{item.id}" }}>➕</button>
         </li>
-        <li class="nav-item" :for={{ note <- item.notes }}>
+        <li :for={{ note <- item.notes }} class={{"nav-item", "nav-selected": @current_note == note.id }}>
           <LiveRedirect to={{ Routes.home_path(@socket, :index, note.id) }}>{{ note.title }}</LiveRedirect>
         </li>
-        <li class="nav-new-item whitespace-nowrap" :if={{ @add_note == item.id }}>
+        <li class="nav-new-item whitespace-nowrap" :show={{ @add_note == item.id }}>
           <Component.CreateNote id={{item.id}} />
         </li>
       </ul>

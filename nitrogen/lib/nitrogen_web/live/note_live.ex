@@ -3,6 +3,7 @@ defmodule NitrogenWeb.NoteLive do
   alias Nitrogen.Notes.Note
   alias Nitrogen.Notes
   alias NitrogenWeb.Component
+  alias NitrogenWeb.Router.Helpers, as: Routes
 
   @sched_store :store
 
@@ -11,6 +12,7 @@ defmodule NitrogenWeb.NoteLive do
   data content, :string, default: ""
   data md, :string, default: ""
   data edit_title, :boolean, default: false
+  data show_md, :boolean, default: true
 
   defp schedule_save do
     Process.send_after(self(), @sched_store, 5_000)
@@ -30,17 +32,19 @@ defmodule NitrogenWeb.NoteLive do
     {:noreply, assign(socket, new_note: new_note, md: md)}
   end
 
-  @impl true
   def handle_event("edit-title", _params, socket) do
     {:noreply, assign(socket, edit_title: true)}
   end
 
-  @impl true
   def handle_event("save-title", %{"title" => title}, socket) do
     new_note = %Note{socket.assigns.new_note | title: title}
     socket = assign(socket, new_note: new_note, edit_title: false)
     save_note(socket)
     {:noreply, socket}
+  end
+
+  def handle_event("toggle-md", _, socket) do
+    {:noreply, assign(socket, show_md: !socket.assigns.show_md)}
   end
 
   @impl true

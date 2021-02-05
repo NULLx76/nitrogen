@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.2.1",
+    "animate-css-grid": "^1.4.3",
+    "animate.css": "^4.1.1",
     "babel-plugin-prismjs": "^2.0.1",
     "cytoscape": "^3.18.0",
     "monaco-editor": "^0.22.1",
@@ -39,5 +41,8 @@
     "terser-webpack-plugin": "^2.3.2",
     "webpack": "4.41.5",
     "webpack-cli": "^3.3.2"
+  },
+  "peerDependencies": {
+    "postcss": "^8.2.4"
   }
 }

@@ -19,7 +19,7 @@ defmodule NitrogenWeb.Component.CreateNote do
 
   def render(assigns) do
     ~H"""
-    <Form for={{ :new_note }} submit="submit">
+    <Form for={{ :new_note }} submit="submit" opts={{ class: "animate__animated animate__fadeInLeft", style: "--animate-duration: 0.3s" }}>
       <TextInput field="title" class="text-black pl-2" opts={{ placeholder: "note name" }} />
       <HiddenInput field="notebook_id" value={{ @id }} />
       <button type="submit" class="ml-2">add</button>

@@ -1,4 +1,5 @@
 // We need to import css for webpack to find it
+import 'animate.css';
 import "../css/app.css"
 
 // Phoenix imports

@@ -11,7 +11,7 @@ defmodule NitrogenWeb.HomeLive do
 
   @impl true
   def handle_params(%{"id" => id}, _session, socket) do
-    {:noreply, assign(socket, :note_id, id)}
+    {:noreply, assign(socket, :note_id, String.to_integer(id))}
   end
 
   @impl true
@@ -44,7 +44,7 @@ defmodule NitrogenWeb.HomeLive do
   def render(assigns) do
     ~H"""
     <div class="grid h-full grid-rows-1" style="grid-template-columns: max-content 1fr">
-      <Component.Navigation id="nav" notebooks={{ @user.notebooks }}/>
+      <Component.Navigation id="nav" current_note={{@note_id}} notebooks={{ @user.notebooks }}/>
 
       <div class="h-screen" :if={{@note_id > 0}}>
         <NitrogenWeb.NoteLive id="content-editor" session={{ %{"note_id" => @note_id} }} />

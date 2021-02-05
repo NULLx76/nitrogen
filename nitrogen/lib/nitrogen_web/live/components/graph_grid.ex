@@ -17,7 +17,7 @@ defmodule NitrogenWeb.Component.GraphGrid do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="grid w-full h-full" style={{calculate_grid(@notebooks)}}>
+    <div class="grid w-full h-full animate__animated animate__fadeIn animate__faster" style={{calculate_grid(@notebooks)}}>
       <div class="border border-4 text-center relative" :for={{ notebook <- @notebooks }}>
         <h3 class="text-black text-2xl">{{ notebook.name }}</h3>
         <Component.Graph id="g{{notebook.id}}" notebook={{notebook}} />
