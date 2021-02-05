@@ -1,6 +1,8 @@
+use std::collections::HashMap;
+
 use pulldown_cmark::{
     escape::{escape_href, escape_html},
-    html, CowStr, Event, LinkType, Options, Parser, Tag,
+    html, BrokenLink, CowStr, Event, LinkType, Options, Parser, Tag,
 };
 
 fn extract_links_from_parser<'a>(
@@ -37,23 +39,23 @@ fn phoenixify_links(e: Event) -> Event {
     }
 }
 
-pub fn render_simple(input: &str) -> String {
-    let parser = Parser::new_ext(input, Options::all());
-    let parser = parser.map(phoenixify_links);
-    let mut output = String::new();
-    html::push_html(&mut output, parser);
-    output
-}
+pub fn render_and_extract_links<'a>(
+    input: &str,
+    lookup: HashMap<&str, i32>,
+) -> (String, Vec<String>) {
+    // Shortcut: [Some Note]
+    // Reference: [Title][Some Note]
+    let mut callback = |broken_link: BrokenLink| match broken_link.link_type {
+        LinkType::Shortcut | LinkType::Reference => lookup.get(broken_link.reference).map(|id| {
+            (
+                format!("/note/{}", id).into(),
+                String::from(broken_link.reference).into(),
+            )
+        }),
+        _ => None,
+    };
 
-pub fn extract_links(input: &str) -> Vec<String> {
-    let parser = Parser::new_ext(input, Options::empty());
-    let mut local_links = Vec::new();
-    extract_links_from_parser(parser, &mut local_links).for_each(drop);
-    local_links
-}
-
-pub fn render_and_extract_links(input: &str) -> (String, Vec<String>) {
-    let parser = Parser::new_ext(input, Options::all());
+    let parser = Parser::new_with_broken_link_callback(input, Options::all(), Some(&mut callback));
 
     let mut local_links = Vec::new();
     let parser = extract_links_from_parser(parser, &mut local_links);
@@ -66,6 +68,8 @@ pub fn render_and_extract_links(input: &str) -> (String, Vec<String>) {
 
 #[cfg(test)]
 mod tests {
+    use std::vec;
+
     use pulldown_cmark::{html, BrokenLink, LinkType, Options, Parser};
 
     use super::*;
@@ -73,7 +77,7 @@ mod tests {
     #[test]
     fn test_phoenixify_links() {
         let input = "[Inline Link](/notes/1) [External link](http://example.com)";
-        let output = render_simple(input);
+        let (output, _) = render_and_extract_links(input, HashMap::new());
 
         let expected = "<p><a data-phx-link=\"redirect\" data-phx-link-state=\"push\" href=\"/notes/1\">Inline Link</a> <a href=\"http://example.com\">External link</a></p>\n";
         assert_eq!(expected, output);
@@ -81,17 +85,16 @@ mod tests {
 
     #[test]
     fn extract_link() {
-        let (_, links) =
-            render_and_extract_links("[Inline Link](/notes/1) [External link](http://example.com)");
+        let (_, links) = render_and_extract_links(
+            "[Inline Link](/notes/1) [External link](http://example.com)",
+            HashMap::new(),
+        );
         assert_eq!(vec!["/notes/1"], links);
 
-        let (_, links) = render_and_extract_links("[Shortcut Link]\n\n[Shortcut Link]: /notes/1");
-        assert_eq!(vec!["/notes/1"], links);
-
-        let links = extract_links("[Inline Link](/notes/1) [External link](http://example.com)");
-        assert_eq!(vec!["/notes/1"], links);
-
-        let links = extract_links("[Shortcut Link]\n\n[Shortcut Link]: /notes/1");
+        let (_, links) = render_and_extract_links(
+            "[Shortcut Link]\n\n[Shortcut Link]: /notes/1",
+            HashMap::new(),
+        );
         assert_eq!(vec!["/notes/1"], links);
     }
 
@@ -99,12 +102,25 @@ mod tests {
     fn basic_example() {
         let input = "Hello world, this is a ~~complicated~~ *very simple* example.";
 
-        let output = render_simple(input);
+        let (output, _) = render_and_extract_links(input, HashMap::new());
 
         let expected =
             "<p>Hello world, this is a <del>complicated</del> <em>very simple</em> example.</p>\n";
 
         assert_eq!(expected, &output);
+    }
+
+    #[test]
+    fn test_link_replace() {
+        let input = "[Hello World]\n\n[Hello][Hello World]";
+        let mut lookup = HashMap::new();
+        lookup.insert("Hello World", 1);
+
+        let (string, links) = render_and_extract_links(input, lookup);
+        let expected = "<p><a data-phx-link=\"redirect\" data-phx-link-state=\"push\" href=\"/note/1\" title=\"Hello World\">Hello World</a></p>\n<p><a data-phx-link=\"redirect\" data-phx-link-state=\"push\" href=\"/note/1\" title=\"Hello World\">Hello</a></p>\n";
+
+        assert_eq!(expected, string);
+        assert_eq!(vec!["/note/1", "/note/1"], links)
     }
 
     #[test]

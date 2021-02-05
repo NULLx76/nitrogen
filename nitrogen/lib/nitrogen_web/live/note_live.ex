@@ -2,13 +2,14 @@ defmodule NitrogenWeb.NoteLive do
   use Surface.LiveView
   alias Surface.Components.Form
   alias Surface.Components.Form.TextInput
-  alias Nitrogen.Notes.Note
+  alias Nitrogen.Notes.{Note, Notebook}
   alias Nitrogen.Notes
   alias NitrogenWeb.Component
   alias NitrogenWeb.Router.Helpers, as: Routes
 
   data note, :any
   data new_note, :any
+  data notebook, :any
   data md, :string, default: ""
   data edit_title, :boolean, default: false
   data show_md, :boolean, default: true
@@ -21,7 +22,7 @@ defmodule NitrogenWeb.NoteLive do
   @impl true
   def handle_event("update", %{"value" => raw}, socket) do
     new_note = save_note(%Note{socket.assigns.new_note | content: raw})
-    md = Notes.render_note(new_note)
+    {md, _} = Notes.render_note(new_note, socket.assigns.notebook)
 
     {:noreply, assign(socket, new_note: new_note, md: md)}
   end
@@ -41,6 +42,11 @@ defmodule NitrogenWeb.NoteLive do
   end
 
   @impl true
+  def handle_info({:notebook, :update, nb}, socket) do
+    {:noreply, assign(socket, notebook: nb)}
+  end
+
+  @impl true
   def terminate(_reason, %{assigns: %{new_note: note}}) do
     save_note(note)
     :ok
@@ -48,9 +54,12 @@ defmodule NitrogenWeb.NoteLive do
 
   def mount(_params, %{"note_id" => id}, socket) do
     note = Notes.get_note!(id)
-    md = Notes.render_note(note)
+    nb = Notes.get_notebook!(note.notebook_id) |> Nitrogen.Repo.preload(:notes)
+    {md, _} = Notes.render_note(note, nb)
 
-    {:ok, assign(socket, note: note, new_note: note, md: md),
+    Nitrogen.Notes.PubSub.subscribe_notebook(nb.id)
+
+    {:ok, assign(socket, note: note, notebook: nb, new_note: note, md: md),
      temporary_assigns: [initial_content: note.content]}
   end
 end
