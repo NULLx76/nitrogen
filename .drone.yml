@@ -15,7 +15,13 @@ steps:
     secret_key:
       from_secret: MINIO_SECRET_KEY
 
-- name: test
+- name: test rust
+  image: harbor.xirion.net/library/elixir-rust:nightly # See Dockerfile.ci for the image definition
+  commands:
+    - cd markdown
+    - cargo test
+
+- name: test elixir
   image: harbor.xirion.net/library/elixir-rust:nightly # See Dockerfile.ci for the image definition
   commands:
     - cd nitrogen

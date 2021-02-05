@@ -5,7 +5,6 @@ defmodule Nitrogen.Graph do
   alias Nitrogen.Graph.CytoSerializer
   alias Nitrogen.{Notes, Repo}
 
-  defp node_name_to_id(%Notebook{} = nb), do: Enum.map(nb.notes, & {&1.title, &1.id}) |> Enum.into(%{})
 
   @spec links_to_ids([binary()]) :: [integer()]
   def links_to_ids(links) do
@@ -20,12 +19,12 @@ defmodule Nitrogen.Graph do
     end)
   end
 
-  @spec build_graph(%Notebook{}) :: Graph.t()
   def build_graph(%Notebook{} = notebook) do
     {g, e} =
       Enum.reduce(notebook.notes, {Graph.new(), []}, fn note, {g, edges} ->
         e =
-          Markdown.extract_links(note.content || "")
+          Notes.render_note(note, notebook)
+          |> elem(1)
           |> links_to_ids()
           |> Enum.map(&{note.id, &1})
 

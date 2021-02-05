@@ -1,4 +1,4 @@
-use std::{collections::HashMap, hash};
+use std::collections::HashMap;
 
 use pulldown_cmark::{
     escape::{escape_href, escape_html},
@@ -39,7 +39,6 @@ fn phoenixify_links(e: Event) -> Event {
     }
 }
 
-
 pub fn render_and_extract_links<'a>(
     input: &str,
     lookup: HashMap<&str, i32>,
@@ -47,13 +46,12 @@ pub fn render_and_extract_links<'a>(
     // Shortcut: [Some Note]
     // Reference: [Title][Some Note]
     let mut callback = |broken_link: BrokenLink| match broken_link.link_type {
-        LinkType::Shortcut | LinkType::Reference => {
-            if let Some(id) = lookup.get(broken_link.reference) {
-                Some((format!("/note/{}", id).into(), String::from(broken_link.reference).into()))
-            } else {
-                None
-            }
-        }
+        LinkType::Shortcut | LinkType::Reference => lookup.get(broken_link.reference).map(|id| {
+            (
+                format!("/note/{}", id).into(),
+                String::from(broken_link.reference).into(),
+            )
+        }),
         _ => None,
     };
 

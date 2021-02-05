@@ -29,8 +29,13 @@ defmodule Nitrogen.Notes do
     Note.changeset(note, attrs)
   end
 
-  def render_note(%Note{} = note) do
-    Markdown.render_simple(note.content || "")
+  # def render_note(%Note{} = note) do
+  #   Markdown.render_and_extract_links(note.content || "", [])
+  # end
+
+  def render_note(%Note{} = note, %Notebook{} = nb) do
+    lookup = Enum.map(nb.notes, & {&1.title, &1.id})
+    Markdown.render_and_extract_links(note.content || "", lookup)
   end
 
   # Notebooks
