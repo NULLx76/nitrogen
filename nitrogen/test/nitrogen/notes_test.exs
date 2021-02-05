@@ -9,7 +9,14 @@ defmodule Nitrogen.NotesTest do
   describe "notes" do
     test "simple rendering works" do
       note = %Note{content: "# Hello world!"}
-      assert Notes.render_note(note) == "<h1>Hello world!</h1>\n"
+      assert Notes.render_note(note, %Notebook{notes: []}) |> elem(0) == "<h1>Hello world!</h1>\n"
+    end
+
+    test "smart link rendering works" do
+      note = %Note{content: "[Hello World]"}
+      notebook = %Notebook{notes: [%Note{id: 42, title: "Hello World"}]}
+      expected = "<p><a data-phx-link=\"redirect\" data-phx-link-state=\"push\" href=\"/note/42\" title=\"Hello World\">Hello World</a></p>\n"
+      assert Notes.render_note(note, notebook) |> elem(0) == expected
     end
 
     test "list_note/0 returns all notes" do

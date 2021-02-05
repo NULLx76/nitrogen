@@ -5,7 +5,7 @@ defmodule Markdown.BencheeTest do
   test "markdown benchmark" do
     Benchee.run(
       %{
-        "markdown_rs" => fn input -> Markdown.render_simple(input) end,
+        "markdown_rs" => fn input -> Markdown.render_and_extract_links(input, []) end,
         "earmark" => fn input -> Earmark.as_html!(input) end
       },
       inputs: %{
