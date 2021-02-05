@@ -1,5 +1,7 @@
 defmodule NitrogenWeb.NoteLive do
   use Surface.LiveView
+  alias Surface.Components.Form
+  alias Surface.Components.Form.TextInput
   alias Nitrogen.Notes.Note
   alias Nitrogen.Notes
   alias NitrogenWeb.Component
